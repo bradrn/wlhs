@@ -25,8 +25,8 @@ library
                         , WLR.Backend
                         , WLR.Render.Renderer
                         , WLR.Version
-    pkgconfig-depends:    wlroots ==0.17.1, wayland-server
-    build-depends:        base ^>=4.16.4.0
+    pkgconfig-depends:    wlroots == 0.17.1, wayland-server
+    build-depends:        base >= 4.16.4.0 && < 5
     hs-source-dirs:       src
     default-language:     Haskell2010
     default-extensions:   CApiFFI
