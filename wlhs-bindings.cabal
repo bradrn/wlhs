@@ -1,0 +1,32 @@
+cabal-version:      3.0
+name:               wlhs-bindings
+version:            0.1.0
+synopsis:           Bindings to wlroots (and libwayland)
+-- description:
+license:            BSD-3-Clause
+license-file:       LICENSE
+author:             Brad Neimann
+maintainer:         brad.neimann@hotmail.com
+-- copyright:
+category:           Graphics
+build-type:         Simple
+extra-doc-files:    CHANGELOG.md
+-- extra-source-files:
+
+common warnings
+    ghc-options:          -Wall -fno-show-valid-hole-fits
+
+library
+    import:               warnings
+    exposed-modules:      WL.ServerCore
+                        , WL.ServerProtocol
+                        , WL.Utils
+                        , WL.Version
+                        , WLR.Backend
+                        , WLR.Render.Renderer
+                        , WLR.Version
+    pkgconfig-depends:    wlroots ==0.17.1, wayland-server
+    build-depends:        base ^>=4.16.4.0
+    hs-source-dirs:       src
+    default-language:     Haskell2010
+    default-extensions:   CApiFFI
