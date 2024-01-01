@@ -20,7 +20,7 @@
             patches = []; # Commit fe53ec693789afb44c899cad8c2df70c8f9f9023 is in 0.17.1.
           });
         });
-        haskellPackages = pkgs.haskellPackages.extend (final: prev: {
+        haskellPackages = pkgs.haskell.packages.ghc96.extend (final: prev: {
           wlhs-bindings = prev.callCabal2nix "wlhs-bindings" ./. { };
         });
       in {

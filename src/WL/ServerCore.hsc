@@ -3,7 +3,8 @@ module WL.ServerCore where
 #include <wayland-server-core.h>
 
 import Foreign
-import Foreign.C.String
+import Foreign.C.ConstPtr
+import Foreign.C.Types
 
 import WL.Utils
 import WL.ServerProtocol
@@ -59,7 +60,7 @@ foreign import capi "wayland-server-core.h wl_display_destroy"
     wl_display_destroy :: Ptr WL_display -> IO ()
 
 foreign import capi "wayland-server-core.h wl_display_add_socket_auto"
-    wl_display_add_socket_auto :: Ptr WL_display -> IO CString
+    wl_display_add_socket_auto :: Ptr WL_display -> IO (ConstPtr CChar)
 
 foreign import capi "wayland-server-core.h wl_display_run"
     wl_display_run :: Ptr WL_display -> IO ()
