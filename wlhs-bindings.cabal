@@ -18,7 +18,11 @@ library
         WL.Utils
         WL.Version
         WLR.Backend
+        WLR.Render.Allocator
+        WLR.Render.DrmFormatSet
         WLR.Render.Renderer
+        WLR.Types.Buffer
+        WLR.Util.Addon
         WLR.Version
 
     pkgconfig-depends:  wlroots ==0.17.1, wayland-server
