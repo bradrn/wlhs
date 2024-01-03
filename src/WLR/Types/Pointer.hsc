@@ -46,6 +46,8 @@ instance Storable WLR_pointer where
         <$> (#peek struct wlr_pointer, base) ptr
         <*> (#peek struct wlr_pointer, impl) ptr
         <*> (#peek struct wlr_pointer, output_name) ptr
+        -- TODO this 'events' attribute isn't actually a pointer in the source
+        -- what should I do?
         <*> (#peek struct wlr_pointer, events) ptr
         <*> (#peek struct wlr_pointer, data) ptr
 
@@ -64,7 +66,7 @@ data WLR_pointer_events = WLR_pointer_events {
     , wlr_pointer_events_button :: WL_signal
     -- |struct wlr_pointer_axis_event
     , wlr_pointer_events_axis :: WL_signal
-    , wlr_pointer_events_frame
+    , wlr_pointer_events_frame :: WL_signal
 
     -- |struct wlr_pointer_swipe_begin_event
     , wlr_pointer_events_swipe_begin :: WL_signal
@@ -85,3 +87,24 @@ data WLR_pointer_events = WLR_pointer_events {
     -- |struct wlr_pointer_hold_end_event
     , wlr_pointer_events_hold_end :: WL_signal
     }
+
+instance Storable WLR_pointer_events where
+    -- Because this 'events' struct is defined within the pointer struct,
+    -- does that mean that I can't use this #alignment???
+    alignment _ = #alignment struct wlr_pointer.events
+    sizeOf _ = #size struct wlr_pointer.events
+    peek ptr = WLR_pointer
+        <$> (#peek struct wlr_pointer.events, motion) ptr
+        <*> (#peek struct wlr_pointer.events, motion_absolute) ptr
+        <*> (#peek struct wlr_pointer.events, button) ptr
+        <*> (#peek struct wlr_pointer.events, axis) ptr
+        <*> (#peek struct wlr_pointer.events, frame) ptr
+        <*> (#peek struct wlr_pointer.events, swipe_begin) ptr
+        <*> (#peek struct wlr_pointer.events, swipe_update) ptr
+        <*> (#peek struct wlr_pointer.events, swipe_end) ptr
+        <*> (#peek struct wlr_pointer.events, pinch_begin) ptr
+        <*> (#peek struct wlr_pointer.events, pinch_update) ptr
+        <*> (#peek struct wlr_pointer.events, pinch_end) ptr
+        <*> (#peek struct wlr_pointer.events, hold_begin) ptr
+        <*> (#peek struct wlr_pointer.events, hold_end) ptr
+
