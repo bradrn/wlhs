@@ -23,6 +23,7 @@ library
         WLR.Render.Renderer
         WLR.Types.Buffer
         WLR.Types.InputDevice
+        WLR.Types.Pointer
         WLR.Util.Addon
         WLR.Util.Box
         WLR.Util.Edges
