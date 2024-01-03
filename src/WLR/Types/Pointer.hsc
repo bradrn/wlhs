@@ -4,6 +4,13 @@ module WLR.Types.Pointer (
 #define WLR_USE_UNSTABLE
 #include <wlr/types/wlr_pointer.h>
 
+import Foreign.Ptr (
+    Ptr
+    )
+import Foreign.C.String (
+    CString
+    )
+
 data {-# CTYPE "wlr/types/wlr_pointer.h" "struct wlr_pointer_impl" #-} WLR_pointer_impl
     deriving (Show)
 
