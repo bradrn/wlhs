@@ -1,3 +1,4 @@
+{-# LANGUAGE EmptyDataDeriving #-}
 module WLR.Types.Pointer (
     ) where
 
@@ -9,6 +10,10 @@ import Foreign.Ptr (
     )
 import Foreign.C.String (
     CString
+    )
+
+import WLR.Types.InputDevice (
+    WLR_input_device
     )
 
 data {-# CTYPE "wlr/types/wlr_pointer.h" "struct wlr_pointer_impl" #-} WLR_pointer_impl
