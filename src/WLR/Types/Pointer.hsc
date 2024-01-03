@@ -91,20 +91,20 @@ data WLR_pointer_events = WLR_pointer_events {
 instance Storable WLR_pointer_events where
     -- Because this 'events' struct is defined within the pointer struct,
     -- does that mean that I can't use this #alignment???
-    alignment _ = #alignment struct wlr_pointer.events
-    sizeOf _ = #size struct wlr_pointer.events
-    peek ptr = WLR_pointer
-        <$> (#peek struct wlr_pointer.events, motion) ptr
-        <*> (#peek struct wlr_pointer.events, motion_absolute) ptr
-        <*> (#peek struct wlr_pointer.events, button) ptr
-        <*> (#peek struct wlr_pointer.events, axis) ptr
-        <*> (#peek struct wlr_pointer.events, frame) ptr
-        <*> (#peek struct wlr_pointer.events, swipe_begin) ptr
-        <*> (#peek struct wlr_pointer.events, swipe_update) ptr
-        <*> (#peek struct wlr_pointer.events, swipe_end) ptr
-        <*> (#peek struct wlr_pointer.events, pinch_begin) ptr
-        <*> (#peek struct wlr_pointer.events, pinch_update) ptr
-        <*> (#peek struct wlr_pointer.events, pinch_end) ptr
-        <*> (#peek struct wlr_pointer.events, hold_begin) ptr
-        <*> (#peek struct wlr_pointer.events, hold_end) ptr
+    -- alignment _ = #alignment struct wlr_pointer.events
+    -- sizeOf _ = #size struct wlr_pointer.events
+    peek ptr = WLR_pointer_events
+        <$> (#peek struct wlr_pointer, events.motion) ptr
+        <*> (#peek struct wlr_pointer, events.motion_absolute) ptr
+        <*> (#peek struct wlr_pointer, events.button) ptr
+        <*> (#peek struct wlr_pointer, events.axis) ptr
+        <*> (#peek struct wlr_pointer, events.frame) ptr
+        <*> (#peek struct wlr_pointer, events.swipe_begin) ptr
+        <*> (#peek struct wlr_pointer, events.swipe_update) ptr
+        <*> (#peek struct wlr_pointer, events.swipe_end) ptr
+        <*> (#peek struct wlr_pointer, events.pinch_begin) ptr
+        <*> (#peek struct wlr_pointer, events.pinch_update) ptr
+        <*> (#peek struct wlr_pointer, events.pinch_end) ptr
+        <*> (#peek struct wlr_pointer, events.hold_begin) ptr
+        <*> (#peek struct wlr_pointer, events.hold_end) ptr
 
