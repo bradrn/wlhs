@@ -92,6 +92,8 @@ instance Storable WLR_pointer_events where
     -- Because this 'events' struct is defined within the pointer struct,
     -- does that mean that I can't use this #alignment???
     -- I doubt this works, but it compiles without sizeOf and alignment
+    -- maybe I have to use the argument to `alignment` TODO look into that,
+    -- maybe I can use that to tell it where to find the nested struct definition
     --alignment _ = #alignment struct wlr_pointer.events
     --sizeOf _ = #size struct wlr_pointer.events
     peek ptr = WLR_pointer_events
@@ -108,3 +110,17 @@ instance Storable WLR_pointer_events where
         <*> (#peek struct wlr_pointer, events.pinch_end) ptr
         <*> (#peek struct wlr_pointer, events.hold_begin) ptr
         <*> (#peek struct wlr_pointer, events.hold_end) ptr
+    poke ptr t = do
+        (#poke struct wlr_pointer, events.motion) ptr $ wlr_pointer_events_motion t
+        (#poke struct wlr_pointer, events.motion_absolute) ptr $ wlr_pointer_events_motion_absolute t
+        (#poke struct wlr_pointer, events.button) ptr $ wlr_pointer_events_button t
+        (#poke struct wlr_pointer, events.axis) ptr $ wlr_pointer_events_axis t
+        (#poke struct wlr_pointer, events.frame) ptr $ wlr_pointer_events_frame t
+        (#poke struct wlr_pointer, events.swipe_begin) ptr $ wlr_pointer_events_swipe_begin t
+        (#poke struct wlr_pointer, events.swipe_update) ptr $ wlr_pointer_events_swipe_update t
+        (#poke struct wlr_pointer, events.swipe_end) ptr $ wlr_pointer_events_swipe_end t
+        (#poke struct wlr_pointer, events.pinch_begin) ptr $ wlr_pointer_events_pinch_begin t
+        (#poke struct wlr_pointer, events.pinch_update) ptr $ wlr_pointer_events_pinch_update t
+        (#poke struct wlr_pointer, events.pinch_end) ptr $ wlr_pointer_events_pinch_end t
+        (#poke struct wlr_pointer, events.hold_begin) ptr $ wlr_pointer_events_hold_begin t
+        (#poke struct wlr_pointer, events.hold_end) ptr $ wlr_pointer_events_hold_end t
