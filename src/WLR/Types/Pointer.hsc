@@ -91,8 +91,9 @@ data WLR_pointer_events = WLR_pointer_events {
 instance Storable WLR_pointer_events where
     -- Because this 'events' struct is defined within the pointer struct,
     -- does that mean that I can't use this #alignment???
-    -- alignment _ = #alignment struct wlr_pointer.events
-    -- sizeOf _ = #size struct wlr_pointer.events
+    -- I doubt this works, but it compiles without sizeOf and alignment
+    --alignment _ = #alignment struct wlr_pointer.events
+    --sizeOf _ = #size struct wlr_pointer.events
     peek ptr = WLR_pointer_events
         <$> (#peek struct wlr_pointer, events.motion) ptr
         <*> (#peek struct wlr_pointer, events.motion_absolute) ptr
@@ -107,4 +108,3 @@ instance Storable WLR_pointer_events where
         <*> (#peek struct wlr_pointer, events.pinch_end) ptr
         <*> (#peek struct wlr_pointer, events.hold_begin) ptr
         <*> (#peek struct wlr_pointer, events.hold_end) ptr
-
