@@ -1,5 +1,8 @@
 {-# LANGUAGE EmptyDataDeriving #-}
 module WLR.Types.Pointer (
+    WLR_pointer(..)
+    , WLR_pointer_events(..)
+    , WLR_pointer_data
     ) where
 
 #define WLR_USE_UNSTABLE
@@ -25,7 +28,7 @@ import WL.ServerCore (
 data {-# CTYPE "wlr/types/wlr_pointer.h" "struct wlr_pointer_impl" #-} WLR_pointer_impl
     deriving (Show)
 
-data Wlr_pointer_data
+data WLR_pointer_data
 
 data {-# CTYPE "wlr/types/wlr_pointer.h" "struct wlr_pointer" #-} WLR_pointer
     = WLR_pointer
@@ -36,7 +39,7 @@ data {-# CTYPE "wlr/types/wlr_pointer.h" "struct wlr_pointer" #-} WLR_pointer
 
     -- TODO what type is this? It's a void* in the C source
     -- void *data;
-    , wlr_pointer_data :: Ptr Wlr_pointer_data
+    , wlr_pointer_data :: Ptr WLR_pointer_data
     }
 
 instance Storable WLR_pointer where
