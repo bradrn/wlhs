@@ -1,4 +1,5 @@
 {-# LANGUAGE EmptyDataDeriving #-}
+{-# LANGUAGE PatternSynonyms #-}
 
 module WLR.Types.InputDevice where
 
@@ -11,13 +12,24 @@ import Foreign.C.Types
 import WL.ServerCore
 
 type WLR_input_device_type = CInt
-#enum WLR_input_device_type, , \
-    WLR_INPUT_DEVICE_KEYBOARD, \
-    WLR_INPUT_DEVICE_POINTER, \
-    WLR_INPUT_DEVICE_TOUCH, \
-    WLR_INPUT_DEVICE_TABLET_TOOL, \
-    WLR_INPUT_DEVICE_TABLET_PAD, \
-    WLR_INPUT_DEVICE_SWITCH
+
+pattern WLR_INPUT_DEVICE_KEYBOARD :: (Eq a, Num a) => a
+pattern WLR_INPUT_DEVICE_KEYBOARD = #const WLR_INPUT_DEVICE_KEYBOARD
+
+pattern WLR_INPUT_DEVICE_POINTER :: (Eq a, Num a) => a
+pattern WLR_INPUT_DEVICE_POINTER = #const WLR_INPUT_DEVICE_POINTER
+
+pattern WLR_INPUT_DEVICE_TOUCH :: (Eq a, Num a) => a
+pattern WLR_INPUT_DEVICE_TOUCH = #const WLR_INPUT_DEVICE_TOUCH
+
+pattern WLR_INPUT_DEVICE_TABLET_TOOL :: (Eq a, Num a) => a
+pattern WLR_INPUT_DEVICE_TABLET_TOOL = #const WLR_INPUT_DEVICE_TABLET_TOOL
+
+pattern WLR_INPUT_DEVICE_TABLET_PAD :: (Eq a, Num a) => a
+pattern WLR_INPUT_DEVICE_TABLET_PAD = #const WLR_INPUT_DEVICE_TABLET_PAD
+
+pattern WLR_INPUT_DEVICE_SWITCH :: (Eq a, Num a) => a
+pattern WLR_INPUT_DEVICE_SWITCH = #const WLR_INPUT_DEVICE_SWITCH
 
 data {-# CTYPE "wlr/types/wlr_input_device.h" "struct wlr_input_device" #-} WLR_input_device
     = WLR_input_device
