@@ -53,13 +53,19 @@ instance Storable WLR_pointer where
         -- what should I do?
         <*> (#peek struct wlr_pointer, events) ptr
         <*> (#peek struct wlr_pointer, data) ptr
+    poke ptr t = do
+        (#poke struct wlr_pointer, base) ptr $ wlr_pointer_base t
+        (#poke struct wlr_pointer, impl) ptr $ wlr_pointer_impl t
+        (#poke struct wlr_pointer, output_name) ptr $ wlr_pointer_output_name t
+        (#poke struct wlr_pointer, events) ptr $ wlr_pointer_events t
+        (#poke struct wlr_pointer, data) ptr $ wlr_pointer_data t
 
-{-# 
+{- 
  - TODO there were some source comments here that had some sort of struct
  - type specified, I guess it's a hint about the types???
  - I think I did the comment structure so that `struct wlr_pointer_motion_event` will show on hover
- - need to check that when I get my hls working ~ Matt
-#-}
+ - need to check that when I get my hls working ~ Matt t
+-}
 data WLR_pointer_events = WLR_pointer_events {
     -- |struct wlr_pointer_motion_event
     wlr_pointer_events_motion :: WL_signal
