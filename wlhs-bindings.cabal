@@ -27,6 +27,7 @@ library
         WLR.Util.Addon
         WLR.Util.Box
         WLR.Util.Edges
+        WLR.Util.Log
         WLR.Version
 
     pkgconfig-depends:  wlroots ==0.17.1, wayland-server
