@@ -28,7 +28,7 @@ data {-# CTYPE "wlr/types/wlr_pointer.h" "struct wlr_pointer_impl" #-} WLR_point
 
 data {-# CTYPE "wlr/types/wlr_pointer.h" "struct wlr_pointer" #-} WLR_pointer
     = WLR_pointer
-    { wlr_pointer_base :: Ptr WLR_input_device
+    { wlr_pointer_base :: WLR_input_device
     , wlr_pointer_impl :: Ptr WLR_pointer_impl
     , wlr_pointer_output_name :: CString
     -- |struct wlr_pointer_motion_event
