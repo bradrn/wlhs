@@ -99,6 +99,7 @@ data {-# CTYPE "wlr/types/wlr_pointer.h" "struct wlr_pointer_motion_event" #-} W
     , wlr_pointer_motion_event_unaccel_dx :: CDouble
     , wlr_pointer_motion_event_unaccel_dy :: CDouble
     }
+
 instance Storable WLR_pointer_motion_event where
     alignment _ = #alignment struct wlr_pointer_motion_event
     sizeOf _ = #size struct wlr_pointer_motion_event
@@ -116,3 +117,27 @@ instance Storable WLR_pointer_motion_event where
         (#poke struct wlr_pointer_motion_event, delta_y) ptr $ wlr_pointer_motion_event_delta_y t
         (#poke struct wlr_pointer_motion_event, unaccel_dx) ptr $ wlr_pointer_motion_event_unaccel_dx t
         (#poke struct wlr_pointer_motion_event, unaccel_dy) ptr $ wlr_pointer_motion_event_unaccel_dy t
+
+data {-# CTYPE "wlr/types/wlr_pointer.h" "struct wlr_pointer_motion_absolute_event" #-} WLR_pointer_motion_absolute_event
+    = WLR_pointer_motion_absolute_event
+    { wlr_pointer_motion_absolute_event_pointer :: Ptr WLR_pointer
+    , wlr_pointer_motion_absolute_event_time_msec :: Word32
+    -- | From 0..1
+    , wlr_pointer_motion_absolute_event_x :: CDouble
+    -- | From 0..1
+    , wlr_pointer_motion_absolute_event_y :: CDouble
+    }
+
+instance Storable WLR_pointer_motion_absolute_event where
+    alignment _ = #alignment struct wlr_pointer_motion_absolute_event
+    sizeOf _ = #size struct wlr_pointer_motion_absolute_event
+    peek ptr = WLR_pointer_motion_absolute_event
+        <$> (#peek struct wlr_pointer_motion_absolute_event, pointer) ptr
+        <*> (#peek struct wlr_pointer_motion_absolute_event, time_msec) ptr
+        <*> (#peek struct wlr_pointer_motion_absolute_event, x) ptr
+        <*> (#peek struct wlr_pointer_motion_absolute_event, y) ptr
+    poke ptr t = do
+        (#poke struct wlr_pointer_motion_absolute_event, pointer) ptr $ wlr_pointer_motion_absolute_event_pointer t
+        (#poke struct wlr_pointer_motion_absolute_event, time_msec) ptr $ wlr_pointer_motion_absolute_event_time_msec t
+        (#poke struct wlr_pointer_motion_absolute_event, x) ptr $ wlr_pointer_motion_absolute_event_x t
+        (#poke struct wlr_pointer_motion_absolute_event, y) ptr $ wlr_pointer_motion_absolute_event_y t
