@@ -5,6 +5,8 @@ module WLR.Types.Pointer where
 #define WLR_USE_UNSTABLE
 #include <wlr/types/wlr_pointer.h>
 
+import Foreign (Word32)
+import Foreign.C.Types (CDouble)
 import Foreign.C.String (CString)
 import Foreign.Ptr (Ptr)
 import Foreign.Storable (Storable(..))
@@ -87,3 +89,30 @@ instance Storable WLR_pointer where
         (#poke struct wlr_pointer, events.hold_begin) ptr $ wlr_pointer_events_hold_begin t
         (#poke struct wlr_pointer, events.hold_end) ptr $ wlr_pointer_events_hold_end t
         (#poke struct wlr_pointer, data) ptr $ wlr_pointer_data t
+
+data {-# CTYPE "wlr/types/wlr_pointer.h" "struct wlr_pointer_motion_event" #-} WLR_pointer_motion_event
+    = WLR_pointer_motion_event
+    { wlr_pointer_motion_event_pointer :: Ptr WLR_pointer
+    , wlr_pointer_motion_event_time_msec :: Word32
+    , wlr_pointer_motion_event_delta_x :: CDouble
+    , wlr_pointer_motion_event_delta_y :: CDouble
+    , wlr_pointer_motion_event_unaccel_dx :: CDouble
+    , wlr_pointer_motion_event_unaccel_dy :: CDouble
+    }
+instance Storable WLR_pointer_motion_event where
+    alignment _ = #alignment struct wlr_pointer_motion_event
+    sizeOf _ = #size struct wlr_pointer_motion_event
+    peek ptr = WLR_pointer_motion_event
+        <$> (#peek struct wlr_pointer_motion_event, pointer) ptr
+        <*> (#peek struct wlr_pointer_motion_event, time_msec) ptr
+        <*> (#peek struct wlr_pointer_motion_event, delta_x) ptr
+        <*> (#peek struct wlr_pointer_motion_event, delta_y) ptr
+        <*> (#peek struct wlr_pointer_motion_event, unaccel_dx) ptr
+        <*> (#peek struct wlr_pointer_motion_event, unaccel_dy) ptr
+    poke ptr t = do
+        (#poke struct wlr_pointer_motion_event, pointer) ptr $ wlr_pointer_motion_event_pointer t
+        (#poke struct wlr_pointer_motion_event, time_msec) ptr $ wlr_pointer_motion_event_time_msec t
+        (#poke struct wlr_pointer_motion_event, delta_x) ptr $ wlr_pointer_motion_event_delta_x t
+        (#poke struct wlr_pointer_motion_event, delta_y) ptr $ wlr_pointer_motion_event_delta_y t
+        (#poke struct wlr_pointer_motion_event, unaccel_dx) ptr $ wlr_pointer_motion_event_unaccel_dx t
+        (#poke struct wlr_pointer_motion_event, unaccel_dy) ptr $ wlr_pointer_motion_event_unaccel_dy t
