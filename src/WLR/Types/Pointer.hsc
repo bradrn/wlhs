@@ -1,4 +1,4 @@
-{-# LANGUAGE EmptyDataDeriving #-}
+{-# LANGUAGE EmptyDataDeriving, PatternSynonyms #-}
 
 module WLR.Types.Pointer where
 
@@ -6,7 +6,7 @@ module WLR.Types.Pointer where
 #include <wlr/types/wlr_pointer.h>
 
 import Foreign (Word32)
-import Foreign.C.Types (CDouble)
+import Foreign.C.Types (CDouble, CInt)
 import Foreign.C.String (CString)
 import Foreign.Ptr (Ptr)
 import Foreign.Storable (Storable(..))
@@ -141,3 +141,20 @@ instance Storable WLR_pointer_motion_absolute_event where
         (#poke struct wlr_pointer_motion_absolute_event, time_msec) ptr $ wlr_pointer_motion_absolute_event_time_msec t
         (#poke struct wlr_pointer_motion_absolute_event, x) ptr $ wlr_pointer_motion_absolute_event_x t
         (#poke struct wlr_pointer_motion_absolute_event, y) ptr $ wlr_pointer_motion_absolute_event_y t
+
+data {-# CTYPE "wlr/types/wlr_pointer.h" "struct wlr_pointer_button_event" #-} WLR_pointer_button_event
+    = WLR_pointer_button_event
+    { wlr_pointer_button_event_pointer :: Ptr WLR_pointer
+    , wlr_pointer_button_event_time_msec :: Word32
+    , wlr_pointer_button_event_button :: Word32
+    -- enum
+    , wlr_pointer_button_event_wlr_button_state :: WLR_button_state_type
+    }
+
+type WLR_button_state_type = CInt
+
+pattern WLR_BUTTON_RELEASED :: (Eq a, Num a) => a
+pattern WLR_BUTTON_RELEASED = #const WLR_BUTTON_RELEASED
+
+pattern WLR_BUTTON_PRESSED :: (Eq a, Num a) => a
+pattern WLR_BUTTON_PRESSED = #const WLR_BUTTON_PRESSED
