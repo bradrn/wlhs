@@ -23,6 +23,8 @@ library
         WLR.Render.Renderer
         WLR.Types.Buffer
         WLR.Util.Addon
+        WLR.Util.Box
+        WLR.Util.Edges
         WLR.Version
 
     pkgconfig-depends:  wlroots ==0.17.1, wayland-server
