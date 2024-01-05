@@ -169,7 +169,7 @@ pattern WLR_AXIS_SOURCE_CONTINUOUS = #const WLR_AXIS_SOURCE_CONTINUOUS
 pattern WLR_AXIS_SOURCE_WHEEL_TILT :: (Eq a, Num a) => a
 pattern WLR_AXIS_SOURCE_WHEEL_TILT = #const WLR_AXIS_SOURCE_WHEEL_TILT
 
-type WLR_axis_orientation = CInt
+type WLR_axis_orientation_type = CInt
 pattern WLR_AXIS_ORIENTATION_VERTICAL :: (Eq a, Num a) => a
 pattern WLR_AXIS_ORIENTATION_VERTICAL = #const WLR_AXIS_ORIENTATION_VERTICAL
 pattern WLR_AXIS_ORIENTATION_HORIZONTAL :: (Eq a, Num a) => a
@@ -177,3 +177,31 @@ pattern WLR_AXIS_ORIENTATION_HORIZONTAL = #const WLR_AXIS_ORIENTATION_HORIZONTAL
 
 pattern WLR_POINTER_AXIS_DISCRETE_STEP :: (Eq a, Num a) => a
 pattern WLR_POINTER_AXIS_DISCRETE_STEP  = #const WLR_POINTER_AXIS_DISCRETE_STEP
+
+data {-# CTYPE "wlr/types/wlr_pointer.h" "struct wlr_pointer_axis_event" #-} WLR_pointer_axis_event
+    = WLR_pointer_axis_event
+    { wlr_pointer_axis_event_pointer :: Ptr WLR_pointer
+    , wlr_pointer_axis_event_time_msec :: Word32
+    , wlr_pointer_axis_event_source :: WLR_axis_source_type
+    , wlr_pointer_axis_event_orientation :: WLR_axis_orientation_type
+    , wlr_pointer_axis_event_delta :: CDouble
+    , wlr_pointer_axis_event_delta_discrete :: Word32
+    }
+
+instance Storable WLR_pointer_axis_event where
+    alignment _ = #alignment struct wlr_pointer_axis_event
+    sizeOf _ = #size struct wlr_pointer_axis_event
+    peek ptr = WLR_pointer_axis_event
+        <$> (#peek struct wlr_pointer_axis_event, pointer) ptr
+        <*> (#peek struct wlr_pointer_axis_event, time_msec) ptr
+        <*> (#peek struct wlr_pointer_axis_event, source) ptr
+        <*> (#peek struct wlr_pointer_axis_event, orientation) ptr
+        <*> (#peek struct wlr_pointer_axis_event, delta) ptr
+        <*> (#peek struct wlr_pointer_axis_event, delta_discrete) ptr
+    poke ptr t = do
+        (#poke struct wlr_pointer_axis_event, pointer) ptr $ wlr_pointer_axis_event_pointer t
+        (#poke struct wlr_pointer_axis_event, time_msec) ptr $ wlr_pointer_axis_event_time_msec t
+        (#poke struct wlr_pointer_axis_event, source) ptr $ wlr_pointer_axis_event_source t
+        (#poke struct wlr_pointer_axis_event, orientation) ptr $ wlr_pointer_axis_event_orientation t
+        (#poke struct wlr_pointer_axis_event, delta) ptr $ wlr_pointer_axis_event_delta t
+        (#poke struct wlr_pointer_axis_event, delta_discrete) ptr $ wlr_pointer_axis_event_delta_discrete t
