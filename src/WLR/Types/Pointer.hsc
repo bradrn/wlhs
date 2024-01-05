@@ -147,9 +147,22 @@ data {-# CTYPE "wlr/types/wlr_pointer.h" "struct wlr_pointer_button_event" #-} W
     { wlr_pointer_button_event_pointer :: Ptr WLR_pointer
     , wlr_pointer_button_event_time_msec :: Word32
     , wlr_pointer_button_event_button :: Word32
-    -- enum
-    , wlr_pointer_button_event_wlr_button_state :: WLR_button_state_type
+    , wlr_pointer_button_event_state :: WLR_button_state_type
     }
+
+instance Storable WLR_pointer_button_event where
+    alignment _ = #alignment struct wlr_pointer_button_event
+    sizeOf _ = #size struct wlr_pointer_button_event
+    peek ptr = WLR_pointer_button_event
+        <$> (#peek struct wlr_pointer_button_event, pointer) ptr
+        <*> (#peek struct wlr_pointer_button_event, time_msec) ptr
+        <*> (#peek struct wlr_pointer_button_event, button) ptr
+        <*> (#peek struct wlr_pointer_button_event, state) ptr
+    poke ptr t = do
+        (#poke struct wlr_pointer_button_event, pointer) ptr $ wlr_pointer_button_event_pointer t
+        (#poke struct wlr_pointer_button_event, time_msec) ptr $ wlr_pointer_button_event_time_msec t
+        (#poke struct wlr_pointer_button_event, button) ptr $ wlr_pointer_button_event_button t
+        (#poke struct wlr_pointer_button_event, state) ptr $ wlr_pointer_button_event_state t
 
 type WLR_button_state_type = CInt
 
