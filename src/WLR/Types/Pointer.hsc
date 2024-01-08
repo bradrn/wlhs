@@ -251,7 +251,7 @@ data {-# CTYPE "wlr/types/wlr_pointer.h" "struct wlr_pointer_swipe_update_event"
 
 instance Storable WLR_pointer_swipe_update_event where
     alignment _ = #alignment struct wlr_pointer_swipe_update_event
-    sizeOf _ = #alignment struct wlr_pointer_swipe_update_event
+    sizeOf _ = #size struct wlr_pointer_swipe_update_event
     peek ptr = WLR_pointer_swipe_update_event
         <$> (#peek struct wlr_pointer_swipe_update_event, pointer) ptr
         <*> (#peek struct wlr_pointer_swipe_update_event, time_msec) ptr
@@ -274,7 +274,7 @@ data {-# CTYPE "wlr/types/wlr_pointer.h" "struct wlr_pointer_swipe_end_event" #-
 
 instance Storable WLR_pointer_swipe_end_event where
     alignment _ = #alignment struct wlr_pointer_swipe_end_event
-    sizeOf _ = #alignment struct wlr_pointer_swipe_end_event
+    sizeOf _ = #size struct wlr_pointer_swipe_end_event
     peek ptr = WLR_pointer_swipe_end_event
         <$> (#peek struct wlr_pointer_swipe_end_event, pointer) ptr
         <*> (#peek struct wlr_pointer_swipe_end_event, time_msec) ptr
@@ -283,3 +283,122 @@ instance Storable WLR_pointer_swipe_end_event where
         (#poke struct wlr_pointer_swipe_end_event, pointer) ptr $ wlr_pointer_swipe_end_event_pointer t
         (#poke struct wlr_pointer_swipe_end_event, time_msec) ptr $ wlr_pointer_swipe_end_event_time_msec t
         (#poke struct wlr_pointer_swipe_end_event, cancelled) ptr $ wlr_pointer_swipe_end_event_cancelled t
+
+data {-# CTYPE "wlr/types/wlr_pointer.h" "struct wlr_pointer_pinch_begin_event" #-} WLR_pointer_pinch_begin_event
+    = WLR_pointer_pinch_begin_event
+    { wlr_pointer_pinch_begin_event_pointer :: Ptr WLR_pointer
+    , wlr_pointer_pinch_begin_event_time_msec :: Word32
+    , wlr_pointer_pinch_begin_event_fingers :: Word32
+    }
+
+instance Storable WLR_pointer_pinch_begin_event where
+    alignment _ = #alignment struct wlr_pointer_pinch_begin_event
+    sizeOf _ = #size struct wlr_pointer_pinch_begin_event
+    peek ptr = WLR_pointer_pinch_begin_event
+        <$> (#peek struct wlr_pointer_pinch_begin_event, pointer) ptr
+        <*> (#peek struct wlr_pointer_pinch_begin_event, time_msec) ptr
+        <*> (#peek struct wlr_pointer_pinch_begin_event, fingers) ptr
+    poke ptr t = do
+        (#poke struct wlr_pointer_pinch_begin_event, pointer) ptr $ wlr_pointer_pinch_begin_event_pointer t
+        (#poke struct wlr_pointer_pinch_begin_event, time_msec) ptr $ wlr_pointer_pinch_begin_event_time_msec t
+        (#poke struct wlr_pointer_pinch_begin_event, fingers) ptr $ wlr_pointer_pinch_begin_event_fingers t
+
+data {-# CTYPE "wlr/types/wlr_pointer.h" "struct wlr_pointer_pinch_update_event" #-} WLR_pointer_pinch_update_event
+    = WLR_pointer_pinch_update_event
+    { wlr_pointer_pinch_update_event_pointer :: Ptr WLR_pointer
+    , wlr_pointer_pinch_update_event_time_msec :: Word32
+    , wlr_pointer_pinch_update_event_fingers :: Word32
+    -- |Relative coordinates of the logical center of the gesture
+    -- |compared to the previous event.
+    , wlr_pointer_pinch_update_event_dx :: CDouble
+    , wlr_pointer_pinch_update_event_dy :: CDouble
+    -- |Absolute scale compared to the begin event
+    , wlr_pointer_pinch_update_event_scale :: CDouble
+    -- |Relative angle in degrees clockwise compared to the previous event.
+    , wlr_pointer_pinch_update_event_rotation :: CDouble
+    }
+
+instance Storable WLR_pointer_pinch_update_event where
+    alignment _ = #alignment struct wlr_pointer_pinch_update_event
+    sizeOf _ = #size struct wlr_pointer_pinch_update_event
+    peek ptr = WLR_pointer_pinch_update_event
+        <$> (#peek struct wlr_pointer_pinch_update_event, pointer) ptr
+        <*> (#peek struct wlr_pointer_pinch_update_event, time_msec) ptr
+        <*> (#peek struct wlr_pointer_pinch_update_event, fingers) ptr
+        <*> (#peek struct wlr_pointer_pinch_update_event, dx) ptr
+        <*> (#peek struct wlr_pointer_pinch_update_event, dy) ptr
+        <*> (#peek struct wlr_pointer_pinch_update_event, scale) ptr
+        <*> (#peek struct wlr_pointer_pinch_update_event, rotation) ptr
+    poke ptr t = do
+        (#poke struct wlr_pointer_pinch_update_event, pointer) ptr $ wlr_pointer_pinch_update_event_pointer t
+        (#poke struct wlr_pointer_pinch_update_event, time_msec) ptr $ wlr_pointer_pinch_update_event_time_msec t
+        (#poke struct wlr_pointer_pinch_update_event, fingers) ptr $ wlr_pointer_pinch_update_event_fingers t
+        (#poke struct wlr_pointer_pinch_update_event, dx) ptr $ wlr_pointer_pinch_update_event_dx t
+        (#poke struct wlr_pointer_pinch_update_event, dy) ptr $ wlr_pointer_pinch_update_event_dy t
+        (#poke struct wlr_pointer_pinch_update_event, scale) ptr $ wlr_pointer_pinch_update_event_scale t
+        (#poke struct wlr_pointer_pinch_update_event, rotation) ptr $ wlr_pointer_pinch_update_event_rotation t
+
+data {-# CTYPE "wlr/types/wlr_pointer.h" "struct wlr_pointer_pinch_end_event" #-} WLR_pointer_pinch_end_event
+    = WLR_pointer_pinch_end_event
+    { wlr_pointer_pinch_end_event_pointer :: Ptr WLR_pointer
+    , wlr_pointer_pinch_end_event_time_msec :: Word32
+    , wlr_pointer_pinch_end_event_cancelled :: CBool
+    }
+
+instance Storable WLR_pointer_pinch_end_event where
+    alignment _ = #alignment struct wlr_pointer_pinch_end_event
+    sizeOf _ = #size struct wlr_pointer_pinch_end_event
+    peek ptr = WLR_pointer_pinch_end_event
+        <$> (#peek struct wlr_pointer_pinch_end_event, pointer) ptr
+        <*> (#peek struct wlr_pointer_pinch_end_event, time_msec) ptr
+        <*> (#peek struct wlr_pointer_pinch_end_event, cancelled) ptr
+    poke ptr t = do
+        (#poke struct wlr_pointer_pinch_end_event, pointer) ptr $ wlr_pointer_pinch_end_event_pointer t
+        (#poke struct wlr_pointer_pinch_end_event, time_msec) ptr $ wlr_pointer_pinch_end_event_time_msec t
+        (#poke struct wlr_pointer_pinch_end_event, cancelled) ptr $ wlr_pointer_pinch_end_event_cancelled t
+
+data {-# CTYPE "wlr/types/wlr_pointer.h" "struct wlr_pointer_hold_begin_event" #-} WLR_pointer_hold_begin_event
+    = WLR_pointer_hold_begin_event
+    { wlr_pointer_hold_begin_event_pointer :: Ptr WLR_pointer
+    , wlr_pointer_hold_begin_event_time_msec :: Word32
+    , wlr_pointer_hold_begin_event_fingers :: Word32
+    }
+
+instance Storable WLR_pointer_hold_begin_event where
+    alignment _ = #alignment struct wlr_pointer_hold_begin_event
+    sizeOf _ = #size struct wlr_pointer_hold_begin_event
+    peek ptr = WLR_pointer_hold_begin_event
+        <$> (#peek struct wlr_pointer_hold_begin_event, pointer) ptr
+        <*> (#peek struct wlr_pointer_hold_begin_event, time_msec) ptr
+        <*> (#peek struct wlr_pointer_hold_begin_event, fingers) ptr
+    poke ptr t = do
+        (#poke struct wlr_pointer_hold_begin_event, pointer) ptr $ wlr_pointer_hold_begin_event_pointer t
+        (#poke struct wlr_pointer_hold_begin_event, time_msec) ptr $ wlr_pointer_hold_begin_event_time_msec t
+        (#poke struct wlr_pointer_hold_begin_event, fingers) ptr $ wlr_pointer_hold_begin_event_fingers t
+
+data {-# CTYPE "wlr/types/wlr_pointer.h" "struct wlr_pointer_hold_end_event" #-} WLR_pointer_hold_end_event
+    = WLR_pointer_hold_end_event
+    { wlr_pointer_hold_end_event_pointer :: Ptr WLR_pointer
+    , wlr_pointer_hold_end_event_time_msec :: Word32
+    , wlr_pointer_hold_end_event_cancelled :: CBool
+    }
+
+instance Storable WLR_pointer_hold_end_event where
+    alignment _ = #alignment struct wlr_pointer_hold_end_event
+    sizeOf _ = #size struct wlr_pointer_hold_end_event
+    peek ptr = WLR_pointer_hold_end_event
+        <$> (#peek struct wlr_pointer_hold_end_event, pointer) ptr
+        <*> (#peek struct wlr_pointer_hold_end_event, time_msec) ptr
+        <*> (#peek struct wlr_pointer_hold_end_event, cancelled) ptr
+    poke ptr t = do
+        (#poke struct wlr_pointer_hold_end_event, pointer) ptr $ wlr_pointer_hold_end_event_pointer t
+        (#poke struct wlr_pointer_hold_end_event, time_msec) ptr $ wlr_pointer_hold_end_event_time_msec t
+        (#poke struct wlr_pointer_hold_end_event, cancelled) ptr $ wlr_pointer_hold_end_event_cancelled t
+
+{-
+- Get a struct wlr_pointer from a struct wlr_input_device.
+- 
+- Asserts that the input device is a pointer.
+-}
+foreign import capi "wlr/types/wlr_pointer.h wlr_pointer_from_input_device"
+    wlr_pointer_from_input_device :: Ptr WLR_input_device -> IO (Ptr WLR_pointer)
