@@ -251,7 +251,7 @@ data {-# CTYPE "wlr/types/wlr_pointer.h" "struct wlr_pointer_swipe_update_event"
 
 instance Storable WLR_pointer_swipe_update_event where
     alignment _ = #alignment struct wlr_pointer_swipe_update_event
-    sizeOf _ = #alignment struct wlr_pointer_swipe_update_event
+    sizeOf _ = #size struct wlr_pointer_swipe_update_event
     peek ptr = WLR_pointer_swipe_update_event
         <$> (#peek struct wlr_pointer_swipe_update_event, pointer) ptr
         <*> (#peek struct wlr_pointer_swipe_update_event, time_msec) ptr
@@ -274,7 +274,7 @@ data {-# CTYPE "wlr/types/wlr_pointer.h" "struct wlr_pointer_swipe_end_event" #-
 
 instance Storable WLR_pointer_swipe_end_event where
     alignment _ = #alignment struct wlr_pointer_swipe_end_event
-    sizeOf _ = #alignment struct wlr_pointer_swipe_end_event
+    sizeOf _ = #size struct wlr_pointer_swipe_end_event
     peek ptr = WLR_pointer_swipe_end_event
         <$> (#peek struct wlr_pointer_swipe_end_event, pointer) ptr
         <*> (#peek struct wlr_pointer_swipe_end_event, time_msec) ptr
@@ -366,7 +366,7 @@ data {-# CTYPE "wlr/types/wlr_pointer.h" "struct wlr_pointer_hold_begin_event" #
 
 instance Storable WLR_pointer_hold_begin_event where
     alignment _ = #alignment struct wlr_pointer_hold_begin_event
-    sizeOf _ = #alignment struct wlr_pointer_hold_begin_event
+    sizeOf _ = #size struct wlr_pointer_hold_begin_event
     peek ptr = WLR_pointer_hold_begin_event
         <$> (#peek struct wlr_pointer_hold_begin_event, pointer) ptr
         <*> (#peek struct wlr_pointer_hold_begin_event, time_msec) ptr
