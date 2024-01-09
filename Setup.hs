@@ -60,11 +60,14 @@ context = HM.fromList
 mkStruct :: [(Maybe Text, GVal')] -> Text
 mkStruct args = dataDecl <> storableDecl
   where
-    (cfile':ctype':hstype':fields') = snd <$> args
+    (cfile':ctype':fields') = snd <$> args
     cfile = asText cfile'
     ctype = asText ctype'
-    hstype = asText hstype'
     fields = pairs $ asText <$> fields'
+
+    hstype =
+        let (prefix, t) = T.break (=='_') ctype
+        in T.toUpper prefix <> t
 
     asHsField n = ctype <> "_" <> asField "_" n
     asCField n = asField "." n

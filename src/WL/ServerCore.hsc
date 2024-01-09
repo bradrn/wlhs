@@ -16,7 +16,6 @@ type WL_notify_func_t
 {{ struct(
     "wayland-server-core.h",
     "wl_listener",
-    "WL_listener",
     "link", "Ptr WL_list",
     "notify", "FunPtr WL_notify_func_t"
 ) }}
@@ -24,7 +23,6 @@ type WL_notify_func_t
 {{ struct(
     "wayland-server-core.h",
     "wl_signal",
-    "WL_signal",
     "listener_list", "WL_list"
 ) }}
 
