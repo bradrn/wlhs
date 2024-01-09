@@ -57,7 +57,8 @@ data {-# CTYPE "include.h" "struct wl_type_name" #-} WL_type_name
     "include.h",
     "wl_type_name",
     "field1", "Type1",
-    "field2", "Type2"
+    "field2", "Type2",
+    "nested field", "Type2"
 ) }}
 ```
 
@@ -69,6 +70,7 @@ data {-# CTYPE "include.h" "struct wl_type_name" #-} WL_type_name
     = WL_type_name
     { wl_type_name_field1 :: Type1
     , wl_type_name_field2 :: Type2
+    , wl_type_name_nested_field :: Type2
     } deriving (Show)
     
 instance Storable WL_type_name where
@@ -77,9 +79,11 @@ instance Storable WL_type_name where
     peek ptr = WL_type_name
         <$> (#peek struct wl_type_name, field1) ptr
         <*> (#peek struct wl_type_name, field2) ptr
+        <*> (#peek struct wl_type_name, nested.field) ptr
     poke ptr t = do
         (#peek struct wl_type_name, field1) ptr (wl_type_name_field1 t)
         (#peek struct wl_type_name, field2) ptr (wl_type_name_field2 t)
+        (#peek struct wl_type_name, nested.field) ptr (wl_type_name_nested_field t)
 ```
 
 </td>
