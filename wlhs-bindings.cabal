@@ -24,23 +24,31 @@ library
         WL.Keyboard
         WL.ServerProtocol
         WL.Utils
+        WL.Global
         WL.Version
+        WL.Client
         WLR.Backend
+        WLR.Types.DataDevice
         WLR.Render.Allocator
+        WLR.Render.Texture
         WLR.Render.DrmFormatSet
         WLR.Render.Renderer
+        WLR.Types.Compositor
         WLR.Types.Buffer
         WLR.Types.InputDevice
         WLR.Types.Pointer
         WLR.Types.Keyboard
         WLR.Types.KeyboardGroup
+        WLR.Types.Seat
+        WLR.Types.PrimarySelection
         WLR.Util.Addon
         WLR.Util.Box
         WLR.Util.Edges
         WLR.Util.Log
         WLR.Version
+        Pixman.Types.Region
 
-    pkgconfig-depends:  wlroots ==0.17.1, wayland-server
+    pkgconfig-depends:  wlroots ==0.17.1, wayland-server, pixman-1
     hs-source-dirs:     src
     default-language:   Haskell2010
     default-extensions: CApiFFI

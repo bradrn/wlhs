@@ -4,6 +4,7 @@ module WL.ServerCore where
 
 import Foreign
 import Foreign.C.String
+import Foreign.Ptr (FunPtr)
 
 import WL.Utils
 import WL.ServerProtocol
@@ -52,3 +53,9 @@ foreign import capi "wayland-server-core.h wl_display_run"
 
 foreign import capi "wayland-server-core.h wl_display_destroy_clients"
     wl_display_destroy_clients :: Ptr WL_display -> IO ()
+
+-- WL_resource isn't importable from wayland, so I think it's meant to be opaque
+data WL_resource
+
+type WL_resource_destroy_func_t = FunPtr (Ptr WL_resource -> IO ())
+--typedef void (*wl_resource_destroy_func_t)(struct wl_resource *resource);
