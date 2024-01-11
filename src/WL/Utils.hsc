@@ -5,12 +5,12 @@ module WL.Utils where
 import Foreign
 import Foreign.C.Types
 
-{{ struct(
-    "wayland-util.h",
-    "wl_list",
-    "prev", "Ptr WL_list",
-    "next", "Ptr WL_list"
-) }}
+{{ struct
+    wayland-util.h,
+    wl_list,
+    prev, Ptr WL_list,
+    next, Ptr WL_list
+}}
 
 foreign import capi "wayland-util.h wl_list_init"
     wl_list_init :: Ptr WL_list -> IO ()

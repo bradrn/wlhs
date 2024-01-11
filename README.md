@@ -32,10 +32,10 @@ This is probably best illustrated by example:
 <td>
 
 ```
-{{ struct(
-    "include.h",
-    "wl_type_name"
-) }}
+{{ struct
+    include.h,
+    wl_type_name
+}}
 ```
 
 </td>
@@ -53,13 +53,13 @@ data {-# CTYPE "include.h" "struct wl_type_name" #-} WL_type_name
 <td>
 
 ```
-{{ struct(
-    "include.h",
-    "wl_type_name",
-    "field1", "Type1",
-    "field2", "Type2",
-    "nested field", "Type2"
-) }}
+{{ struct
+    include.h,
+    wl_type_name,
+    field1, Type1,
+    field2, Type2,
+    nested field, Type2
+}}
 ```
 
 </td>
@@ -92,11 +92,11 @@ instance Storable WL_type_name where
 <td>
 
 ```
-{{ enum(
-    "WL_type_name",
-    "WLR_ENUM_VALUE_1",
-    "WLR_ENUM_VALUE_2"
-) }}
+{{ enum
+    WL_type_name,
+    WLR_ENUM_VALUE_1,
+    WLR_ENUM_VALUE_2
+}}
 ```
 
 </td>

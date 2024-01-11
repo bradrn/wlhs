@@ -1,8 +1,9 @@
+{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Main where
 
-import Control.Monad.Writer (Writer)
+import Data.Char (isSpace)
 import Data.Functor ((<&>))
 import Data.Text (Text)
 import Distribution.Simple
@@ -13,9 +14,7 @@ import Distribution.Types.LocalBuildInfo (LocalBuildInfo)
 import Distribution.Types.ComponentLocalBuildInfo (ComponentLocalBuildInfo)
 import System.Directory (getTemporaryDirectory)
 import System.IO (hClose)
-import Text.Ginger
 
-import qualified Data.HashMap.Strict as HM
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
 
@@ -30,40 +29,51 @@ ppHscJinja bi lbi clbi = PreProcessor
     { platformIndependent = False
     , ppOrdering = unsorted
     , runPreProcessor = mkSimplePreProcessor $ \inFile outFile verbosity -> do
-        parsed <- parseGingerFile (fmap Just . readFile) inFile
-        case parsed of
+        source <- T.readFile inFile
+        case process source of
             Left err -> do
-                source <- readFile inFile
-                die' verbosity $ formatParserError (Just source) err
+                die' verbosity $ "in file " ++ inFile ++ ": " ++ err
             Right result -> do
-                -- put output into a temporary file, then run existing
+                -- put result into a temporary file, then run existing
                 -- hsc2hs preprocessor on that
                 tmp <- getTemporaryDirectory
-                withTempFile tmp "wlhs.hsc" $ \tmpFile handle -> do
+                withTempFile tmp (asTemplate inFile) $ \tmpFile handle -> do
                     debug verbosity $ "HscJinja: got temporary file: " ++ tmpFile
-                    T.hPutStr handle $ easyRender context result
+                    T.hPutStr handle result
                     hClose handle  -- make sure to finalise everything before hsc2hs reads it
                     runSimplePreProcessor
                         (ppHsc2hs bi lbi clbi)
                         tmpFile outFile verbosity
     }
 
+asTemplate :: String -> String
+asTemplate = fmap $ \case
+    '/' -> '-'
+    '\\' -> '-'
+    c -> c
 
-type GVal' = GVal (Run SourcePos (Writer Text) Text)
+process :: Text -> Either String Text
+process = fmap T.concat . traverse go . T.splitOn "{{"
+  where
+    go :: Text -> Either String Text
+    go t = case T.breakOn "}}" t of
+        (directive, after)
+            | T.null after -> Right t  -- before the first {{
+            | otherwise ->
+                let (macro, args) = T.break isSpace $ T.strip directive
+                    args' = T.strip <$> T.splitOn "," args
+                    result = case T.strip macro of
+                        "struct" -> Right $ mkStruct args'
+                        "enum"   -> Right $ mkEnum   args'
+                        m -> Left $ T.unpack $ "unknown macro: " <> m
+                    after' = T.drop 2 after  -- get rid of }}
+                in (<> after') <$> result
 
-context :: HM.HashMap Text (GVal')
-context = HM.fromList
-    [ ("struct", fromFunction $ pure . toGVal . mkStruct)
-    , ("enum", fromFunction $ pure . toGVal . mkEnum)
-    ]
-
-mkStruct :: [(Maybe Text, GVal')] -> Text
+mkStruct :: [Text] -> Text
 mkStruct args = dataDecl <> storableDecl
   where
-    (cfile':ctype':fields') = snd <$> args
-    cfile = asText cfile'
-    ctype = asText ctype'
-    fields = pairs $ asText <$> fields'
+    (cfile:ctype:fields') = args
+    fields = pairs $ fields'
 
     hstype =
         let (prefix, t) = T.break (=='_') ctype
@@ -101,12 +111,10 @@ mkStruct args = dataDecl <> storableDecl
             <> ") ptr (" <> asHsField n <> " t)"
 
 
-mkEnum :: [(Maybe Text, GVal')] -> Text
+mkEnum :: [Text] -> Text
 mkEnum args = enumType <> "\n" <> enumPatterns
   where
-    (hstype':rest') = snd <$> args
-    hstype = asText hstype'
-    rest = asText <$> rest'
+    (hstype:rest) = args
 
     enumType = "type " <> hstype <> " = CInt"
 

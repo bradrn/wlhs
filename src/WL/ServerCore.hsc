@@ -13,18 +13,18 @@ type WL_notify_func_t
     -> Ptr ()
     -> IO ()
 
-{{ struct(
-    "wayland-server-core.h",
-    "wl_listener",
-    "link", "Ptr WL_list",
-    "notify", "FunPtr WL_notify_func_t"
-) }}
+{{ struct
+    wayland-server-core.h,
+    wl_listener,
+    link, Ptr WL_list,
+    notify, FunPtr WL_notify_func_t
+}}
 
-{{ struct(
-    "wayland-server-core.h",
-    "wl_signal",
-    "listener_list", "WL_list"
-) }}
+{{ struct
+    wayland-server-core.h,
+    wl_signal,
+    listener_list, WL_list
+}}
 
 foreign import capi "wayland-server-core.h wl_signal_init"
     wl_signal_init :: Ptr WL_signal -> IO ()
