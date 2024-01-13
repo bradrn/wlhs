@@ -171,10 +171,5 @@ pattern WLR_POINTER_AXIS_DISCRETE_STEP  = #const WLR_POINTER_AXIS_DISCRETE_STEP
    cancelled, CBool
 }}
 
-{-
-- Get a struct wlr_pointer from a struct wlr_input_device.
-- 
-- Asserts that the input device is a pointer.
--}
 foreign import capi "wlr/types/wlr_pointer.h wlr_pointer_from_input_device"
     wlr_pointer_from_input_device :: Ptr WLR_input_device -> IO (Ptr WLR_pointer)
