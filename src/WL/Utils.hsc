@@ -5,21 +5,12 @@ module WL.Utils where
 import Foreign
 import Foreign.C.Types
 
-data {-# CTYPE "wayland-util.h" "struct wl_list" #-} WL_list
-    = WL_list
-    { wl_list_prev :: Ptr WL_list
-    , wl_list_next :: Ptr WL_list
-    } deriving (Show)
-
-instance Storable WL_list where
-    alignment _ = #alignment struct wl_list
-    sizeOf _ = #size struct wl_list
-    peek ptr = WL_list
-        <$> (#peek struct wl_list, prev) ptr
-        <*> (#peek struct wl_list, next) ptr
-    poke ptr t = do
-        (#poke struct wl_list, prev) ptr (wl_list_prev t)
-        (#poke struct wl_list, next) ptr (wl_list_next t)
+{{ struct
+    wayland-util.h,
+    wl_list,
+    prev, Ptr WL_list,
+    next, Ptr WL_list
+}}
 
 foreign import capi "wayland-util.h wl_list_init"
     wl_list_init :: Ptr WL_list -> IO ()

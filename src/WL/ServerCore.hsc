@@ -13,32 +13,18 @@ type WL_notify_func_t
     -> Ptr ()
     -> IO ()
 
-data {-# CTYPE "wayland-server-core.h" "struct wl_listener" #-} WL_listener
-    = WL_listener
-    { wl_listener_link :: Ptr WL_list
-    , wl_listener_notify :: FunPtr WL_notify_func_t
-    } deriving (Show)
+{{ struct
+    wayland-server-core.h,
+    wl_listener,
+    link, Ptr WL_list,
+    notify, FunPtr WL_notify_func_t
+}}
 
-instance Storable WL_listener where
-    alignment _ = #alignment struct wl_listener
-    sizeOf _ = #size struct wl_listener
-    peek ptr = WL_listener
-        <$> (#peek struct wl_listener, link) ptr
-        <*> (#peek struct wl_listener, notify) ptr
-    poke ptr t = do
-        (#poke struct wl_listener, link) ptr $ wl_listener_link t
-        (#poke struct wl_listener, notify) ptr $ wl_listener_notify t
-
-newtype {-# CTYPE "wayland-server-core.h" "struct wl_signal" #-} WL_signal
-    = WL_signal
-    { wl_signal_listener_list :: WL_list
-    } deriving (Show)
-
-instance Storable WL_signal where
-    alignment _ = #alignment struct wl_signal
-    sizeOf _ = #size struct wl_signal
-    peek ptr = WL_signal <$> (#peek struct wl_signal, listener_list) ptr
-    poke ptr t = (#poke struct wl_signal, listener_list) ptr $ wl_signal_listener_list t
+{{ struct
+    wayland-server-core.h,
+    wl_signal,
+    listener_list, WL_list
+}}
 
 foreign import capi "wayland-server-core.h wl_signal_init"
     wl_signal_init :: Ptr WL_signal -> IO ()
