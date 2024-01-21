@@ -102,13 +102,25 @@ mkStruct args = dataDecl <> storableDecl
         <> "\n    poke ptr t = " <> pokeImpl
 
     peekImpl = T.intercalate " <*> " $
-        fields <&> \(n, _) ->
-            "(#peek struct " <> ctype <> ", " <> asCField n <> ") ptr"
+        fields <&> \(n, _) -> peekText n
+
+    peekText n =
+      let arrayLen = T.dropWhile (/='[') n
+      in case arrayLen of
+        "" -> T.concat [ "(#peek struct ", ctype, ", ", asCField n, ") ptr" ]
+        _  -> T.concat [ "peekArray ", (T.pack . show) $ readArrayLen arrayLen
+                       , " $ (#ptr ", ctype, ", ", asCField n, ") ptr" ]
 
     pokeImpl = T.intercalate " >> " $
-        fields <&> \(n, _) ->
-            "(#poke struct " <> ctype <> ", " <> asCField n
-            <> ") ptr (" <> asHsField n <> " t)"
+        fields <&> \(n, _) -> pokeText n
+
+    pokeText n =
+      let arrayLen = T.dropWhile (/='[') n
+      in case arrayLen of
+        "" -> T.concat [ "(#poke struct ", ctype, ", ", asCField n
+                       , ") ptr (", asHsField n, " t)" ]
+        _  -> T.concat [ "pokeArray ((#ptr ", ctype, ", ", asCField n
+                       , ") ptr) (", asHsField n, " t)" ]
 
 
 mkEnum :: [Text] -> Text
@@ -130,4 +142,7 @@ pairs (a:b:as) = (a,b) : pairs as
 pairs _        = []
 
 asField :: Text -> Text -> Text
-asField sep = T.intercalate sep . T.words
+asField sep = T.intercalate sep . T.words . T.takeWhile (/='[')
+
+readArrayLen :: Text -> Int
+readArrayLen = head . read . T.unpack
