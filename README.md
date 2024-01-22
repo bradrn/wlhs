@@ -58,7 +58,7 @@ data {-# CTYPE "include.h" "struct wl_type_name" #-} WL_type_name
     wl_type_name,
     field1, Type1,
     field2, Type2,
-	array_field[9], [Type2]
+    array_field[9], [Type2]
     nested field, Type2
 }}
 ```
@@ -81,12 +81,12 @@ instance Storable WL_type_name where
     peek ptr = WL_type_name
         <$> (#peek struct wl_type_name, field1) ptr
         <*> (#peek struct wl_type_name, field2) ptr
-		<*> peekArray 9 $ (#ptr struct wl_type_name, array_field) ptr
+        <*> peekArray 9 $ (#ptr struct wl_type_name, array_field) ptr
         <*> (#peek struct wl_type_name, nested.field) ptr
     poke ptr t = do
         (#poke struct wl_type_name, field1) ptr (wl_type_name_field1 t)
         >> (#poke struct wl_type_name, field2) ptr (wl_type_name_field2 t)
-		>> pokeArray ((#ptr wlr_type_name, array_field) ptr) (wlr_type_name_array_field t)
+        >> pokeArray ((#ptr wlr_type_name, array_field) ptr) (wlr_type_name_array_field t)
         >> (#poke struct wl_type_name, nested.field) ptr (wl_type_name_nested_field t)
 ```
 
