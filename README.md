@@ -81,9 +81,9 @@ instance Storable WL_type_name where
         <*> (#peek struct wl_type_name, field2) ptr
         <*> (#peek struct wl_type_name, nested.field) ptr
     poke ptr t = do
-        (#peek struct wl_type_name, field1) ptr (wl_type_name_field1 t)
-        (#peek struct wl_type_name, field2) ptr (wl_type_name_field2 t)
-        (#peek struct wl_type_name, nested.field) ptr (wl_type_name_nested_field t)
+        (#poke struct wl_type_name, field1) ptr (wl_type_name_field1 t)
+        >> (#poke struct wl_type_name, field2) ptr (wl_type_name_field2 t)
+        >> (#poke struct wl_type_name, nested.field) ptr (wl_type_name_nested_field t)
 ```
 
 </td>
