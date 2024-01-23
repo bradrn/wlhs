@@ -5,8 +5,8 @@ module WLR.Types.Keyboard where
 #define WLR_USE_UNSTABLE
 #include <wlr/types/wlr_keyboard.h>
 
-import Foreign (Word32, Storable(..))
-import Foreign.C.Types (CSize(..), CInt(..), CBool(..))
+import Foreign (Storable(..))
+import Foreign.C.Types (CSize(..), CInt(..), CBool(..), CUInt)
 import Foreign.C.String (CString)
 import Foreign.Ptr (Ptr)
 
@@ -72,10 +72,10 @@ data {-# CTYPE "wlr/types/wlr_keyboard.h" "struct wlr_keyboard impl" #-} WLR_key
 {{ struct
     wlr/types/wlr_keyboard.h,
     wlr_keyboard_modifiers,
-    depressed, Word32,
-    latched, Word32,
-    locked, Word32,
-    group, Word32
+    depressed, CUInt,
+    latched, CUInt,
+    locked, CUInt,
+    group, CUInt
 }}
 
 -- cannot import these types from libxcommon because of their fields which have
@@ -103,8 +103,8 @@ type ArrayType = ()
     keycodes, ArrayType,
     num_keycodes, CSize,
     modifiers, WLR_keyboard_modifiers,
-    repeat_info rate, Word32,
-    repeat_info delay, Word32,
+    repeat_info rate, CUInt,
+    repeat_info delay, CUInt,
     events key, WL_signal,
     events modifiers, WL_signal,
     events keymap, WL_signal,
@@ -119,8 +119,8 @@ type ArrayType = ()
 {{ struct
     wlr/types/wlr_keyboard.h,
     wlr_keyboard_key_event,
-    time_msec, Word32,
-    keycode, Word32,
+    time_msec, CUInt,
+    keycode, CUInt,
     update_state, CBool,
     state, WL_keyboard_key_state
 }}
