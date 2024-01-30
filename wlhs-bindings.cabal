@@ -21,6 +21,7 @@ custom-setup
 library
     exposed-modules:
         WL.ServerCore
+        WL.Keyboard
         WL.ServerProtocol
         WL.Utils
         WL.Version
@@ -31,6 +32,8 @@ library
         WLR.Types.Buffer
         WLR.Types.InputDevice
         WLR.Types.Pointer
+        WLR.Types.Keyboard
+        WLR.Types.KeyboardGroup
         WLR.Util.Addon
         WLR.Util.Box
         WLR.Util.Edges
