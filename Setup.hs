@@ -1,5 +1,6 @@
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE ViewPatterns #-}
 
 module Main where
 
@@ -82,6 +83,12 @@ mkStruct args = dataDecl <> storableDecl
     asHsField n = ctype <> "_" <> asField "_" n
     asCField n = asField "." n
 
+    splitFieldType :: Text -> (Maybe Text, Text)
+    splitFieldType (T.stripPrefix "[" -> Just t') =
+        let (n, T.stripPrefix "]" -> Just t) = T.break (==']') t'
+        in (Just n, "[" <> t <> "]")
+    splitFieldType t = (Nothing, t)
+
     dataDecl =
         T.concat [ "data {-# CTYPE \"" , cfile , "\" \"struct ", ctype, "\" #-} " , hstype]
         <> if (null fields')
@@ -90,7 +97,7 @@ mkStruct args = dataDecl <> storableDecl
         <> " deriving Show"
 
     recordFields = T.intercalate ", " $
-        fields <&> \(n, t) -> asHsField n <> " :: " <> t
+        fields <&> \(n, t) -> asHsField n <> " :: " <> snd (splitFieldType t)
 
     storableDecl
       | null fields' = ""
@@ -102,13 +109,18 @@ mkStruct args = dataDecl <> storableDecl
         <> "\n    poke ptr t = " <> pokeImpl
 
     peekImpl = T.intercalate " <*> " $
-        fields <&> \(n, _) ->
-            "(#peek struct " <> ctype <> ", " <> asCField n <> ") ptr"
+        fields <&> \(n, t) -> case splitFieldType t of
+            (Nothing, _) -> "(#peek struct " <> ctype <> ", " <> asCField n <> ") ptr"
+            (Just m, _)  -> "peekArray " <> m <> "((#ptr struct " <> ctype <> ", " <> asCField n <> ") ptr)"
 
     pokeImpl = T.intercalate " >> " $
-        fields <&> \(n, _) ->
-            "(#poke struct " <> ctype <> ", " <> asCField n
-            <> ") ptr (" <> asHsField n <> " t)"
+        fields <&> \(n, t) -> case splitFieldType t of
+            (Nothing, _) ->
+                "(#poke struct " <> ctype <> ", " <> asCField n
+                <> ") ptr (" <> asHsField n <> " t)"
+            (Just _, _) ->
+                "pokeArray ((#ptr struct " <> ctype <> ", " <> asCField n
+                <> ") ptr) (" <> asHsField n <> " t)"
 
 
 mkEnum :: [Text] -> Text
