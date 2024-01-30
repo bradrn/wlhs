@@ -5,7 +5,7 @@ module WLR.Types.Keyboard where
 #define WLR_USE_UNSTABLE
 #include <wlr/types/wlr_keyboard.h>
 
-import Foreign (Storable(..))
+import Foreign (Storable(..), Word32, peekArray, pokeArray, plusPtr)
 import Foreign.C.Types (CSize(..), CInt(..), CBool(..), CUInt)
 import Foreign.C.String (CString)
 import Foreign.Ptr (Ptr)
@@ -83,9 +83,6 @@ data {-# CTYPE "wlr/types/wlr_keyboard.h" "struct wlr_keyboard impl" #-} WLR_key
 data XKB_keymap
 data XKB_state
 
--- TODO write this by hand or update the macro to work with arrays
-type ArrayType = ()
-
 {{ struct
     wlr/types/wlr_keyboard.h,
     wlr_keyboard,
@@ -97,10 +94,10 @@ type ArrayType = ()
     keymap_fd, CInt,
     keymap, Ptr XKB_keymap,
     xkb_state, Ptr XKB_state,
-    led_indexes, ArrayType,
-    mod_indexes, ArrayType,
+    led_indexes, [(#const WLR_LED_COUNT)]Word32,
+    mod_indexes, [(#const WLR_MODIFIER_COUNT)]Word32,
     leds, CInt,
-    keycodes, ArrayType,
+    keycodes, [(#const WLR_KEYBOARD_KEYS_CAP)]Word32,
     num_keycodes, CSize,
     modifiers, WLR_keyboard_modifiers,
     repeat_info rate, CUInt,
@@ -111,10 +108,6 @@ type ArrayType = ()
     events repeat_info, WL_signal,
     data, Ptr ()
 }}
-    --remaining array types
-    --xkb_led_index_t led_indexes[WLR_LED_COUNT];
-    --xkb_mod_index_t mod_indexes[WLR_MODIFIER_COUNT];
-    --uint32_t keycodes[WLR_KEYBOARD_KEYS_CAP];
 
 {{ struct
     wlr/types/wlr_keyboard.h,
