@@ -1,3 +1,5 @@
+{-# LANGUAGE EmptyDataDeriving #-}
+
 module WLR.Render.Renderer where
 
 #define WLR_USE_UNSTABLE

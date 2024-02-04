@@ -1,3 +1,5 @@
+{-# LANGUAGE EmptyDataDeriving #-}
+
 module WLR.Backend where
 
 #define WLR_USE_UNSTABLE
