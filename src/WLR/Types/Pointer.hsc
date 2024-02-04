@@ -72,7 +72,6 @@ import WL.ServerCore (WL_signal)
     WLR_BUTTON_PRESSED
 }}
 
-
 {{ enum
     WLR_axis_source_type,
     WLR_AXIS_SOURCE_WHEEL,
