@@ -7,10 +7,18 @@ import Foreign
 import Foreign.C.Types
 
 {{ struct
-    wlr/renderer/drm_format_set.h,
+    wlr/render/drm_format_set.h,
     wlr_drm_format,
     format, Word32,
     len, CSize,
     capacity, CSize,
     modifiers, Ptr Word64
+}}
+
+{{ struct
+    wlr/render/drm_format_set.h,
+    wlr_drm_format_set,
+    len, CSize,
+    capacity, CSize,
+    formats, Ptr WLR_drm_format
 }}
