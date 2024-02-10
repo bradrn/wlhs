@@ -20,20 +20,26 @@ custom-setup
 
 library
     exposed-modules:
-        WL.ServerCore
+        PIXMAN.Pixman
         WL.Keyboard
+        WL.ServerCore
         WL.ServerProtocol
         WL.Utils
         WL.Version
         WLR.Backend
         WLR.Render.Allocator
         WLR.Render.DrmFormatSet
+        WLR.Render.Interface
         WLR.Render.Renderer
+        WLR.Render.Swapchain
+        WLR.Render.Texture
         WLR.Types.Buffer
         WLR.Types.InputDevice
-        WLR.Types.Pointer
         WLR.Types.Keyboard
         WLR.Types.KeyboardGroup
+        WLR.Types.Output
+        WLR.Types.OutputLayer
+        WLR.Types.Pointer
         WLR.Util.Addon
         WLR.Util.Box
         WLR.Util.Edges
