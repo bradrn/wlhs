@@ -8,6 +8,11 @@ import Foreign.C.String
 import WL.Utils
 import WL.ServerProtocol
 
+-- Opaque objects
+type WL_event_source = ()
+type WL_global = ()
+type WL_resource = ()
+
 type WL_notify_func_t
     =  WL_listener
     -> Ptr ()
