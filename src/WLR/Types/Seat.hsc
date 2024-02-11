@@ -1,3 +1,4 @@
+{-# LANGUAGE PatternSynonyms #-}
 module WLR.Types.Seat where
 
 
@@ -11,6 +12,7 @@ import Foreign.C.Types (CUInt, CDouble, CInt, CBool, CSize)
 -- https://github.com/haskell/core-libraries-committee/issues/118
 -- import Foreign.C.ConstPtr
 import Foreign.Ptr (Ptr, FunPtr)
+import Foreign (peekArray, pokeArray, plusPtr)
 import Foreign.Storable (Storable(..))
 
 import WL.ServerProtocol (WL_display)
@@ -33,8 +35,6 @@ import WLR.Types.Pointer (
     )
 import WLR.Types.Keyboard (WLR_keyboard, WLR_keyboard_modifiers)
 
-type TODOArray = Ptr ()
-
 {{ struct
     wlr/types/wlr_seat.h,
     wlr_serial_range,
@@ -42,20 +42,17 @@ type TODOArray = Ptr ()
     max_incl, CUInt
 }}
 
+pattern WLR_SERIAL_RINGSET_SIZE :: (Eq a, Num a) => a
+pattern WLR_SERIAL_RINGSET_SIZE = 128
+
 {{ struct
     wlr/types/wlr_seat.h,
     wlr_serial_ringset,
-    data, TODOArray,
+    data, [WLR_SERIAL_RINGSET_SIZE] WLR_serial_range,
     end, CInt,
     count, CInt
 }}
 
--- TODO arrays
---struct {
---    int32_t acc_discrete[2];
---    int32_t last_discrete[2];
---    double acc_axis[2];
---} value120;
 {{ struct
     wlr/types/wlr_seat.h,
     wlr_seat_client,
@@ -70,9 +67,9 @@ type TODOArray = Ptr ()
     events destroy, WL_signal,
     serials, WLR_serial_ringset,
     needs_touch_frame, CBool,
-    value120 acc_discrete, TODOArray,
-    value120 last_discrete, TODOArray,
-    value120 acc_axis, TODOArray,
+    value120 acc_discrete, [2] CInt,
+    value120 last_discrete, [2] CInt,
+    value120 acc_axis, [2] CDouble,
 }}
 
 {{ struct
@@ -95,7 +92,9 @@ type TODOArray = Ptr ()
     data, Ptr ()
 }}
 
--- TODO array type uint32_t buttons[WLR_POINTER_BUTTONS_CAP];
+pattern WLR_POINTER_BUTTONS_CAP :: (Eq a, Num a) => a
+pattern WLR_POINTER_BUTTONS_CAP = 16
+
 {{ struct
     wlr/types/wlr_seat.h,
     wlr_seat_pointer_state,
@@ -108,7 +107,7 @@ type TODOArray = Ptr ()
     default_grab, Ptr WLR_seat_pointer_grab,
     sent_axis_source, CBool,
     cached_axis_source, WLR_axis_source_type,
-    buttons, TODOArray,
+    buttons, [WLR_POINTER_BUTTONS_CAP] CUInt,
     button_count, CSize,
     grab_button, CUInt,
     grab_serial, CUInt,
@@ -205,6 +204,8 @@ type TODOArray = Ptr ()
 }}
 
 -- TODO interface was a ConstPtr
+-- it looks there is a type for this starting in base 4.18.0.0
+-- https://hackage.haskell.org/package/base-4.19.0.0/docs/Foreign-C-ConstPtr.html
 
 {{ struct
     wlr/types/wlr_seat.h,
@@ -215,11 +216,12 @@ type TODOArray = Ptr ()
 }}
 
 -- TODO enter's CUInt final parameter is a const array
+-- how do I do 'const' in HSC?
 
 {{ struct
     wlr/types/wlr_seat.h,
     wlr_keyboard_grab_interface,
-    enter, FunPtr (Ptr WLR_seat_keyboard_grab -> Ptr WLR_surface -> CUInt -> IO ()),
+    enter, FunPtr (Ptr WLR_seat_keyboard_grab -> Ptr WLR_surface -> [] CUInt -> IO ()),
     clear_focus, FunPtr (Ptr WLR_seat_keyboard_grab -> IO ()),
     key, FunPtr (Ptr WLR_seat_keyboard_grab -> CUInt -> CUInt -> CUInt -> IO ()),
     modifiers, FunPtr (Ptr WLR_seat_keyboard_grab -> Ptr WLR_keyboard_modifiers -> IO ()),
