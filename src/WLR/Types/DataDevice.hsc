@@ -14,15 +14,23 @@ import WL.ServerCore (WL_signal, WL_listener)
 
 import WLR.Types.Compositor (WLR_surface)
 
--- TODO break up this import cycle with a hs-boot file
 import WLR.Types.Seat (
     WLR_seat_keyboard_grab
     , WLR_seat_pointer_grab
     , WLR_seat_touch_grab
     , WLR_seat_client
     , WLR_seat
-    , WLR_drag_icon
     )
+
+{{ struct
+    wlr/types/wlr_data_device.h,
+    wlr_drag_icon,
+    drag, Ptr WLR_drag,
+    surface, Ptr WLR_surface,
+    events destroy, WL_signal,
+    surface_destroy, WL_listener,
+    data, Ptr (),
+}}
 
 {{ struct wlr/types/wlr_data_device.h, wlr_data_source_impl }}
 
@@ -55,9 +63,9 @@ import WLR.Types.Seat (
     seat, Ptr WLR_seat,
     seat_client, Ptr WLR_seat_client,
     focus_client, Ptr WLR_seat_client,
-    icon, Maybe (Ptr WLR_drag_icon),
-    focus, Maybe (Ptr WLR_surface),
-    source, Maybe (Ptr WLR_data_source),
+    icon, Ptr WLR_drag_icon,
+    focus, Ptr WLR_surface,
+    source, Ptr WLR_data_source,
     started, CBool,
     dropped, CBool,
     cancelling, CBool,

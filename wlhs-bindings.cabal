@@ -20,6 +20,7 @@ custom-setup
 
 library
     exposed-modules:
+        WLR.Util.Time
         WL.ServerCore
         WL.Keyboard
         WL.ServerProtocol
@@ -39,13 +40,13 @@ library
         WLR.Types.Pointer
         WLR.Types.Keyboard
         WLR.Types.KeyboardGroup
-        WLR.Types.Seat
         WLR.Types.PrimarySelection
         WLR.Util.Addon
         WLR.Util.Box
         WLR.Util.Edges
         WLR.Util.Log
         WLR.Version
+        WLR.Types.Seat
         Pixman.Types.Region
 
     pkgconfig-depends:  wlroots ==0.17.1, wayland-server, pixman-1

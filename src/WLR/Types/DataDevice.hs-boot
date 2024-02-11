@@ -1,3 +1,4 @@
+{-# LANGUAGE EmptyDataDecls #-}
 module WLR.Types.DataDevice (
     WLR_drag
     , WLR_data_source
