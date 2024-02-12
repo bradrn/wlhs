@@ -4,6 +4,7 @@ module WLR.Types.DataDevice where
 #define WLR_USE_UNSTABLE
 #include <wlr/types/wlr_data_device.h>
 
+import Foreign (Word32, Int32)
 import Foreign.Ptr (Ptr)
 import Foreign.C.Types (CUInt, CBool, CInt)
 import Foreign.Storable (Storable(..))
@@ -39,10 +40,10 @@ import WLR.Types.Seat (
     wlr_data_source,
     impl, Ptr WLR_data_source_impl,
     mime_types, WL_array,
-    actions, CUInt,
+    actions, Word32,
     accepted, CBool,
     current_dnd_action, WL_data_device_manager_dnd_action,
-    compositor_action, CUInt,
+    compositor_action, Word32,
     events destroy, WL_signal
 }}
 
@@ -69,7 +70,7 @@ import WLR.Types.Seat (
     started, CBool,
     dropped, CBool,
     cancelling, CBool,
-    grab_touch_id, CUInt,
+    grab_touch_id, Int32,
     touch_id, CUInt,
     events focus, WL_signal,
     events motion, WL_signal,
