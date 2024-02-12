@@ -7,12 +7,12 @@ module WLR.Types.Seat where
 #include <time.h>
 
 import Foreign.C.String (CString)
-import Foreign.C.Types (CUInt, CDouble, CInt, CBool, CSize)
+import Foreign.C.Types (CDouble, CInt, CBool, CSize)
 -- if we upgrade our base libraries we can use this
 -- https://github.com/haskell/core-libraries-committee/issues/118
 -- import Foreign.C.ConstPtr
 import Foreign.Ptr (Ptr, FunPtr)
-import Foreign (peekArray, pokeArray, plusPtr)
+import Foreign (peekArray, pokeArray, plusPtr, Word32, Int32)
 import Foreign.Storable (Storable(..))
 
 import WL.ServerProtocol (WL_display)
@@ -38,8 +38,8 @@ import WLR.Types.Keyboard (WLR_keyboard, WLR_keyboard_modifiers)
 {{ struct
     wlr/types/wlr_seat.h,
     wlr_serial_range,
-    min_incl, CUInt,
-    max_incl, CUInt
+    min_incl, Word32,
+    max_incl, Word32
 }}
 
 pattern WLR_SERIAL_RINGSET_SIZE :: (Eq a, Num a) => a
@@ -67,8 +67,8 @@ pattern WLR_SERIAL_RINGSET_SIZE = 128
     events destroy, WL_signal,
     serials, WLR_serial_ringset,
     needs_touch_frame, CBool,
-    value120 acc_discrete, [2] CInt,
-    value120 last_discrete, [2] CInt,
+    value120 acc_discrete, [2] Int32,
+    value120 last_discrete, [2] Int32,
     value120 acc_axis, [2] CDouble,
 }}
 
@@ -77,9 +77,9 @@ pattern WLR_SERIAL_RINGSET_SIZE = 128
     wlr_pointer_grab_interface,
     enter, FunPtr (Ptr WLR_seat_pointer_grab -> Ptr WLR_surface -> CDouble -> CDouble -> IO ()),
     clear_focus, FunPtr (Ptr WLR_seat_pointer_grab -> IO ()),
-    motion, FunPtr (Ptr WLR_seat_pointer_grab -> CUInt -> CDouble -> CDouble -> ()),
-    button, FunPtr (Ptr WLR_seat_pointer_grab -> CUInt -> CUInt -> WLR_button_state_type -> IO (CUInt)),
-    axis, FunPtr (Ptr WLR_seat_pointer_grab -> CUInt -> WLR_axis_orientation_type -> CDouble -> CInt -> WLR_axis_source_type -> IO ()),
+    motion, FunPtr (Ptr WLR_seat_pointer_grab -> Word32 -> CDouble -> CDouble -> ()),
+    button, FunPtr (Ptr WLR_seat_pointer_grab -> Word32 -> Word32 -> WLR_button_state_type -> IO (Word32)),
+    axis, FunPtr (Ptr WLR_seat_pointer_grab -> Word32 -> WLR_axis_orientation_type -> CDouble -> Int32 -> WLR_axis_source_type -> IO ()),
     frame, FunPtr (Ptr WLR_seat_pointer_grab -> IO ()),
     cancel, FunPtr (Ptr WLR_seat_pointer_grab -> IO ())
 }}
@@ -107,11 +107,11 @@ pattern WLR_POINTER_BUTTONS_CAP = 16
     default_grab, Ptr WLR_seat_pointer_grab,
     sent_axis_source, CBool,
     cached_axis_source, WLR_axis_source_type,
-    buttons, [WLR_POINTER_BUTTONS_CAP] CUInt,
+    buttons, [WLR_POINTER_BUTTONS_CAP] Word32,
     button_count, CSize,
-    grab_button, CUInt,
-    grab_serial, CUInt,
-    grab_time, CUInt,
+    grab_button, Word32,
+    grab_serial, Word32,
+    grab_time, Word32,
     surface_destroy, WL_listener,
     events focus_change, WL_signal,
 }}
@@ -137,8 +137,8 @@ pattern WLR_POINTER_BUTTONS_CAP = 16
     wlr_seat_touch_state,
     seat, Ptr WLR_seat,
     touch_points, WL_list,
-    grab_serial, CUInt,
-    grab_id, CUInt,
+    grab_serial, Word32,
+    grab_id, Word32,
     grab, Ptr WLR_seat_touch_grab,
     default_grab, Ptr WLR_seat_touch_grab,
 }}
@@ -150,17 +150,17 @@ pattern WLR_POINTER_BUTTONS_CAP = 16
     display, Ptr WL_display,
     clients, Ptr WL_list,
     name, CString,
-    capabilities, CUInt,
-    accumulated_capabilities, CUInt,
+    capabilities, Word32,
+    accumulated_capabilities, Word32,
     last_event, TIMESPEC,
     selection_source, Ptr WLR_data_source,
-    selection_serial, CUInt,
+    selection_serial, Word32,
     selection_offers, WL_list,
     primary_selection_source, Ptr WLR_primary_selection_source,
-    primary_selection_serial, CUInt,
+    primary_selection_serial, Word32,
     drag, Ptr WLR_drag,
     drag_source, Ptr WLR_data_source,
-    drag_serial, CUInt,
+    drag_serial, Word32,
     drag_offers, WL_list,
     pointer_state, WLR_seat_pointer_state,
     keyboard_state, WLR_seat_keyboard_state,
@@ -189,7 +189,7 @@ pattern WLR_POINTER_BUTTONS_CAP = 16
 {{ struct
     wlr/types/seat.h,
     wlr_touch_point,
-    touch_id, CUInt,
+    touch_id, Int32,
     surface, Ptr WLR_surface,
     client, Ptr WLR_seat_client,
     focus_surface, Ptr WLR_surface,
@@ -215,15 +215,15 @@ pattern WLR_POINTER_BUTTONS_CAP = 16
     data, Ptr ()
 }}
 
--- TODO enter's CUInt final parameter is a const array
+-- TODO enter's Word32 final parameter is a const array
 -- how do I do 'const' in HSC?
 
 {{ struct
     wlr/types/wlr_seat.h,
     wlr_keyboard_grab_interface,
-    enter, FunPtr (Ptr WLR_seat_keyboard_grab -> Ptr WLR_surface -> [] CUInt -> IO ()),
+    enter, FunPtr (Ptr WLR_seat_keyboard_grab -> Ptr WLR_surface -> [] Word32 -> IO ()),
     clear_focus, FunPtr (Ptr WLR_seat_keyboard_grab -> IO ()),
-    key, FunPtr (Ptr WLR_seat_keyboard_grab -> CUInt -> CUInt -> CUInt -> IO ()),
+    key, FunPtr (Ptr WLR_seat_keyboard_grab -> Word32 -> Word32 -> Word32 -> IO ()),
     modifiers, FunPtr (Ptr WLR_seat_keyboard_grab -> Ptr WLR_keyboard_modifiers -> IO ()),
     cancel, FunPtr (Ptr WLR_seat_keyboard_grab -> IO ())
 }}
@@ -231,10 +231,10 @@ pattern WLR_POINTER_BUTTONS_CAP = 16
 {{ struct
     wlr/types/wlr_seat.h,
     wlr_touch_grab_interface,
-    down, FunPtr (Ptr WLR_seat_touch_grab -> CUInt -> Ptr WLR_touch_point -> IO (CUInt)),
-    up, FunPtr (Ptr WLR_seat_touch_grab -> CUInt -> Ptr WLR_touch_point -> IO ()),
-    motion, FunPtr (Ptr WLR_seat_touch_grab -> CUInt -> Ptr WLR_touch_point -> IO ()),
-    enter, FunPtr (Ptr WLR_seat_touch_grab -> CUInt -> Ptr WLR_touch_point -> IO ()),
+    down, FunPtr (Ptr WLR_seat_touch_grab -> Word32 -> Ptr WLR_touch_point -> IO (Word32)),
+    up, FunPtr (Ptr WLR_seat_touch_grab -> Word32 -> Ptr WLR_touch_point -> IO ()),
+    motion, FunPtr (Ptr WLR_seat_touch_grab -> Word32 -> Ptr WLR_touch_point -> IO ()),
+    enter, FunPtr (Ptr WLR_seat_touch_grab -> Word32 -> Ptr WLR_touch_point -> IO ()),
     frame, FunPtr (Ptr WLR_seat_touch_grab -> IO ()),
     cancel, FunPtr (Ptr WLR_seat_touch_grab -> IO()),
     wl_cancel, FunPtr (Ptr WLR_seat_touch_grab -> Ptr WLR_surface -> IO ())
