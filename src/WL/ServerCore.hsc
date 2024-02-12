@@ -9,9 +9,9 @@ import WL.Utils
 import WL.ServerProtocol
 
 -- Opaque objects
-type WL_event_source = ()
-type WL_global = ()
-type WL_resource = ()
+{{ struct wayland-server-core.h, wl_event_source }}
+{{ struct wayland-server-core.h, wl_global }}
+{{ struct wayland-server-core.h, wl_resource }}
 
 type WL_notify_func_t
     =  WL_listener

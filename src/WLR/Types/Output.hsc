@@ -25,8 +25,8 @@ import WLR.Util.Addon
 import WLR.Util.Box
 
 -- A struct from <time.h>. I think this should only be handled by
--- standard library code, so an opaque pointer should suffice.
-type TIMESPEC = ()
+-- standard library code.
+{{ struct time.h, timespec }}
 
 {{ enum
     WLR_output_mode_aspect_ratio,
