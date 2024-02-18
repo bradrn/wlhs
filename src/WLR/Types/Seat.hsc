@@ -7,7 +7,7 @@ module WLR.Types.Seat where
 #include <time.h>
 
 import Foreign.C.String (CString)
-import Foreign.C.Types (CDouble, CInt, CBool, CSize)
+import Foreign.C.Types (CDouble(..), CInt(..), CBool, CSize, CBool(..))
 -- if we upgrade our base libraries we can use this
 -- https://github.com/haskell/core-libraries-committee/issues/118
 -- import Foreign.C.ConstPtr
@@ -248,3 +248,178 @@ pattern WLR_POINTER_BUTTONS_CAP = 16
     data, Ptr ()
 }}
 
+{{ struct
+    wlr/types/seat.h,
+    wlr_seat_pointer_request_set_cursor_event,
+    seat_client, Ptr WLR_seat_client,
+    surface, Ptr WLR_surface,
+    serial, Word32,
+    hotspot_x, Int32,
+    hotspot_y, Int32
+}}
+
+{{ struct
+    wlr/types/seat.h,
+    wlr_seat_request_set_selection_event,
+    source, Ptr WLR_data_source,
+    serial, Word32
+}}
+
+{{ struct wlr/types/seat.h,
+    wlr_seat_request_set_primary_selection_event,
+    source, Ptr WLR_primary_selection_source,
+    serial, Word32
+}}
+
+{{ struct wlr/types/seat.h,
+    wlr_seat_request_start_drag_event,
+    drag, Ptr WLR_drag,
+    origin, Ptr WLR_surface,
+    serial, Word32
+}}
+
+{{ struct wlr/types/seat.h,
+    wlr_seat_pointer_focus_change_event,
+    seat, Ptr WLR_seat,
+    old_surface, Ptr WLR_surface,
+    new_surface, Ptr WLR_surface,
+    sx, CDouble,
+    sy, CDouble
+}}
+{{ struct wlr/types/seat.h,
+    wlr_seat_keyboard_focus_change_event,
+    seat, Ptr WLR_seat,
+    old_surface, Ptr WLR_surface,
+    new_surface, Ptr WLR_surface,
+}}
+
+{-
+ - Allocates a new struct wlr_seat and adds a wl_seat global to the display.
+ -}
+foreign import capi "wlr/types/wlr_seat.h wlr_seat_create"
+    wlr_seat_create :: Ptr WL_display -> CString -> IO (Ptr WLR_seat)
+
+{-
+ - Destroys a seat, removes its wl_seat global and clears focus for all
+ - devices belonging to the seat.
+ -}
+foreign import capi "wlr/types/wlr_seat.h wlr_seat_destroy"
+    wlr_seat_destroy :: Ptr WLR_seat -> IO ()
+
+{-
+ - Gets a struct wlr_seat_client for the specified client, or returns NULL if no
+ - client is bound for that client.
+ -}
+foreign import capi "wlr/types/wlr_seat.h wlr_seat_client_for_wl_client"
+    wlr_seat_client_for_wl_client :: Ptr WLR_seat -> Ptr WL_client -> IO (Ptr WLR_seat_client)
+
+{-
+ - Updates the capabilities available on this seat.
+ - Will automatically send them to all clients.
+ -}
+foreign import capi "wlr/types/wlr_seat.h wlr_seat_set_capabilities"
+    wlr_seat_set_capabilities :: Ptr WLR_seat -> Word32 -> IO ()
+
+--wlr_seat_set_name
+{-
+ - Updates the name of this seat.
+ - Will automatically send it to all clients.
+ -}
+foreign import capi "wlr/types/wlr_seat.h wlr_seat_set_name"
+    wlr_seat_set_name :: Ptr WLR_seat -> CString -> IO ()
+
+{-
+ - Whether or not the surface has pointer focus
+ -}
+foreign import capi "wlr/types/wlr_seat.h wlr_seat_pointer_surface_has_focus"
+    wlr_seat_pointer_surface_has_focus :: Ptr WLR_seat -> Ptr WLR_surface -> IO CBool
+
+{-
+ - Send a pointer enter event to the given surface and consider it to be the
+ - focused surface for the pointer. This will send a leave event to the last
+ - surface that was entered. Coordinates for the enter event are surface-local.
+ - This function does not respect pointer grabs: you probably want
+ - wlr_seat_pointer_notify_enter() instead.
+ -}
+foreign import capi "wlr/types/wlr_seat.h wlr_seat_pointer_enter"
+    wlr_seat_pointer_enter :: Ptr WLR_seat -> Ptr WLR_surface -> CDouble -> CDouble -> IO ()
+
+{-
+ - Clear the focused surface for the pointer and leave all entered surfaces.
+ - This function does not respect pointer grabs: you probably want
+ - wlr_seat_pointer_notify_clear_focus() instead.
+ -}
+foreign import capi "wlr/types/wlr_seat.h wlr_seat_pointer_clear_focus"
+    wlr_seat_pointer_clear_focus :: Ptr WLR_seat -> IO ()
+
+{-
+ - Send a motion event to the surface with pointer focus. Coordinates for the
+ - motion event are surface-local. This function does not respect pointer grabs:
+ - you probably want wlr_seat_pointer_notify_motion() instead.
+ -}
+foreign import capi "wlr/types/wlr_seat.h wlr_seat_pointer_send_motion"
+    wlr_seat_pointer_send_motion :: Ptr WLR_seat -> Word32 -> CDouble -> CDouble -> IO ()
+
+{-
+ - Send a button event to the surface with pointer focus. Coordinates for the
+ - button event are surface-local. Returns the serial. This function does not
+ - respect pointer grabs: you probably want wlr_seat_pointer_notify_button()
+ - instead.
+ -}
+foreign import capi "wlr/types/wlr_seat.h wlr_seat_pointer_send_button"
+    wlr_seat_pointer_send_button :: Ptr WLR_seat -> Word32 -> Word32 -> WLR_button_state_type -> IO Word32
+
+{-
+ - Send an axis event to the surface with pointer focus. This function does not
+ - respect pointer grabs: you probably want wlr_seat_pointer_notify_axis()
+ - instead.
+ -}
+foreign import capi "wlr/types/wlr_seat.h wlr_seat_pointer_send_axis"
+    wlr_seat_pointer_send_axis :: Ptr WLR_seat -> Word32 -> WLR_axis_orientation_type -> CDouble -> Int32 -> WLR_axis_source_type -> IO ()
+
+{-
+ - Send a frame event to the surface with pointer focus. This function does not
+ - respect pointer grabs: you probably want wlr_seat_pointer_notify_frame()
+ - instead.
+ -}
+foreign import capi "wlr/types/wlr_seat.h wlr_seat_pointer_send_frame"
+    wlr_seat_pointer_send_frame :: Ptr WLR_seat -> IO ()
+
+{-
+ - Notify the seat of a pointer enter event to the given surface and request it
+ - to be the focused surface for the pointer. Pass surface-local coordinates
+ - where the enter occurred. This will send a leave event to the currently-
+ - focused surface. Defers to any grab of the pointer.
+ -}
+foreign import capi "wlr/types/wlr_seat.h wlr_seat_pointer_notify_enter"
+    wlr_seat_pointer_notify_enter :: Ptr WLR_seat -> Ptr WLR_surface -> CDouble -> CDouble -> IO ()
+
+{-
+ - Notify the seat of a pointer leave event to the currently-focused surface.
+ - Defers to any grab of the pointer.
+ -}
+foreign import capi "wlr/types/wlr_seat.h wlr_seat_pointer_notify_clear_focus"
+    wlr_seat_pointer_notify_clear_focus :: Ptr WLR_seat -> IO ()
+
+{-
+ - Warp the pointer of this seat to the given surface-local coordinates, without
+ - generating motion events.
+ -}
+foreign import capi "wlr/types/wlr_seat.h wlr_seat_pointer_warp"
+    wlr_seat_pointer_warp :: Ptr WLR_seat -> CDouble -> CDouble -> IO ()
+
+{-
+ - Notify the seat of motion over the given surface. Pass surface-local
+ - coordinates where the pointer motion occurred. Defers to any grab of the
+ - pointer.
+ -}
+foreign import capi "wlr/types/wlr_seat.h wlr_seat_pointer_notify_motion"
+    wlr_seat_pointer_notify_motion :: Ptr WLR_seat -> Word32 -> CDouble -> CDouble -> IO ()
+
+{-
+ - Notify the seat that a button has been pressed. Returns the serial of the
+ - button press or zero if no button press was sent. Defers to any grab of the
+ - pointer.
+ -}
+foreign import capi "wlr/types/wlr_seat.h wlr_seat_pointer_notify_button"
+    wlr_seat_pointer_notify_button :: Ptr WLR_seat -> Word32 -> Word32 -> WLR_button_state_type -> IO Word32
