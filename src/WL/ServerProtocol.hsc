@@ -1,9 +1,11 @@
 {-# LANGUAGE PatternSynonyms #-}
 module WL.ServerProtocol where
 
+import Foreign.C.Types (CInt)
+import Foreign.C.Types
+
 #include <wayland-server-protocol.h>
 
-import Foreign.C.Types (CInt)
 
 type WL_data_device_manager_dnd_action = CInt
 
@@ -19,7 +21,17 @@ pattern WL_DATA_DEVICE_MANAGER_DND_ACTION_MOVE = 2
 pattern WL_DATA_DEVICE_MANAGER_DND_ACTION_ASK :: (Eq a, Num a) => a
 pattern WL_DATA_DEVICE_MANAGER_DND_ACTION_ASK = 4
 
-data WL_display
+data {-# CTYPE "wayland-server-protocol.h" "struct wl_display" #-} WL_display
+
+{{ enum
+    WL_output_subpixel,
+    WL_OUTPUT_SUBPIXEL_UNKNOWN,
+    WL_OUTPUT_SUBPIXEL_NONE,
+    WL_OUTPUT_SUBPIXEL_HORIZONTAL_RGB,
+    WL_OUTPUT_SUBPIXEL_HORIZONTAL_BGR,
+    WL_OUTPUT_SUBPIXEL_VERTICAL_RGB,
+    WL_OUTPUT_SUBPIXEL_VERTICAL_BGR
+}}
 
 {{ enum
     WL_output_transform,

@@ -15,7 +15,7 @@ import WLR.Render.Renderer (WLR_renderer)
 import WLR.Util.Box (WLR_fbox)
 import WLR.Util.Addon (WLR_addon_set)
 
-import Pixman.Types.Region (PIXMAN_region32)
+import PIXMAN.Pixman (PIXMAN_region32)
 
 #define WLR_USE_UNSTABLE
 #include <wlr/types/wlr_compositor.h>

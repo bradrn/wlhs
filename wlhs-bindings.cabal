@@ -20,9 +20,9 @@ custom-setup
 
 library
     exposed-modules:
-        WLR.Util.Time
-        WL.ServerCore
+        PIXMAN.Pixman
         WL.Keyboard
+        WL.ServerCore
         WL.ServerProtocol
         WL.Utils
         WL.Global
@@ -31,23 +31,27 @@ library
         WLR.Backend
         WLR.Types.DataDevice
         WLR.Render.Allocator
-        WLR.Render.Texture
         WLR.Render.DrmFormatSet
+        WLR.Render.Interface
         WLR.Render.Renderer
+        WLR.Render.Swapchain
+        WLR.Render.Texture
         WLR.Types.Compositor
         WLR.Types.Buffer
         WLR.Types.InputDevice
-        WLR.Types.Pointer
         WLR.Types.Keyboard
         WLR.Types.KeyboardGroup
         WLR.Types.PrimarySelection
+        WLR.Types.Output
+        WLR.Types.OutputLayer
+        WLR.Types.Pointer
+        WLR.Types.Seat
         WLR.Util.Addon
         WLR.Util.Box
         WLR.Util.Edges
         WLR.Util.Log
+        WLR.Util.Time
         WLR.Version
-        WLR.Types.Seat
-        Pixman.Types.Region
 
     pkgconfig-depends:  wlroots ==0.17.1, wayland-server, pixman-1
     hs-source-dirs:     src
