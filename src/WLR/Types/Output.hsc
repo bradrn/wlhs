@@ -40,9 +40,9 @@ import WLR.Util.Box
 {{ struct
     wlr/types/wlr_output.h,
     wlr_output_mode,
-    width,                CInt,
-    height,               CInt,
-    refresh,              CInt,
+    width,                Int32,
+    height,               Int32,
+    refresh,              Int32,
     preferred,            CBool,
     picture_aspect_ratio, WLR_output_mode_aspect_ratio,
     link,                 WL_list
@@ -56,12 +56,12 @@ import WLR.Util.Box
     y,           CDouble,
     enabled,     CBool,
     visible,     CBool,
-    width,       CUInt,
-    height,      CUInt,
+    width,       Word32,
+    height,      Word32,
     src_box,     WLR_fbox,
     transform,   WL_output_transform,
-    hotspot_x,   CInt,
-    hotspot_y,   CInt,
+    hotspot_x,   Int32,
+    hotspot_y,   Int32,
     texture,     Ptr WLR_texture,
     own_texture, CBool,
     link,        WL_list
@@ -97,23 +97,23 @@ import WLR.Util.Box
 {{ struct
     wlr/types/wlr_output.h,
     wlr_output_state,
-    committed,             CUInt,
+    committed,             Word32,
     allow_reconfiguration, CBool,
     damage,                PIXMAN_region32_t,
     enabled,               CBool,
     scale,                 CFloat,
     transform,             WL_output_transform,
     adaptive_sync_enabled, CBool,
-    render_format,         CUInt,
+    render_format,         Word32,
     subpixel,              WL_output_subpixel,
     buffer,                Ptr WLR_buffer,
     tearing_page_flip,     CBool,
     mode_type,             WLR_output_state_mode_type,
     mode,                  Ptr WLR_output_mode,
-    custom_mode width,     CInt,
-    custom_mode height,    CInt,
-    custom_mode refresh,   CInt,
-    gamma_lut,             Ptr CShort,
+    custom_mode width,     Int32,
+    custom_mode height,    Int32,
+    custom_mode refresh,   Int32,
+    gamma_lut,             Ptr Word16,
     gamma_lut_size,        CSize,
     layers,                Ptr WLR_output_layer_state,
     layers_len,            CSize
@@ -142,25 +142,25 @@ import WLR.Util.Box
     make,                  Ptr CChar,
     model,                 Ptr CChar,
     serial,                Ptr CChar,
-    phys_width,            CInt,
-    phys_height,           CInt,
+    phys_width,            Int32,
+    phys_height,           Int32,
     modes,                 WL_list,
     current_mode,          Ptr WLR_output_mode,
-    width,                 CInt,
-    height,                CInt,
-    refresh,               CInt,
+    width,                 Int32,
+    height,                Int32,
+    refresh,               Int32,
     enabled,               CBool,
     scale,                 CFloat,
     subpixel,              WL_output_subpixel,
     transform,             WL_output_transform,
     adaptive_sync_status,  WLR_output_adaptive_sync_status,
-    render_format,         CUInt,
+    render_format,         Word32,
     needs_frame,           CBool,
     frame_pending,         CBool,
     transform_matrix,      [9]CFloat,
     non_desktop,           CBool,
     pending,               WLR_output_state,
-    commit_seq,            CUInt,
+    commit_seq,            Word32,
     events frame,          WL_signal,
     events damage,         WL_signal,
     events needs_frame,    WL_signal,
@@ -225,12 +225,12 @@ import WLR.Util.Box
     wlr/types/wlr_output.h,
     wlr_output_event_present,
     output,     Ptr WLR_output,
-    commit_seq, CUInt,
+    commit_seq, Word32,
     presented,  CBool,
     when,       Ptr TIMESPEC,
     seq,        CUInt,
     refresh,    CInt,
-    flags,      CUInt
+    flags,      Word32
 }}
 
 {{ struct
@@ -266,7 +266,7 @@ foreign import capi "wlr/types/wlr_output.h wlr_output_set_mode"
     wlr_output_set_mode :: Ptr WLR_output -> Ptr WLR_output_mode -> IO ()
 
 foreign import capi "wlr/types/wlr_output.h wlr_output_set_custom_mode"
-    wlr_output_set_custom_mode :: Ptr WLR_output -> CInt -> CInt -> CInt -> IO ()
+    wlr_output_set_custom_mode :: Ptr WLR_output -> Int32 -> Int32 -> Int32 -> IO ()
 
 foreign import capi "wlr/types/wlr_output.h wlr_output_set_transform"
     wlr_output_set_transform :: Ptr WLR_output -> WL_output_transform -> IO ()
@@ -275,7 +275,7 @@ foreign import capi "wlr/types/wlr_output.h wlr_output_enable_adaptive_sync"
     wlr_output_enable_adaptive_sync :: Ptr WLR_output -> CBool -> IO ()
 
 foreign import capi "wlr/types/wlr_output.h wlr_output_set_render_format"
-    wlr_output_set_render_format :: Ptr WLR_output -> CUInt -> IO ()
+    wlr_output_set_render_format :: Ptr WLR_output -> Word32 -> IO ()
 
 foreign import capi "wlr/types/wlr_output.h wlr_output_set_scale"
     wlr_output_set_scale :: Ptr WLR_output -> CFloat -> IO ()
@@ -308,7 +308,7 @@ foreign import capi "wlr/types/wlr_output.h wlr_output_attach_buffer"
     wlr_output_attach_buffer :: Ptr WLR_output -> Ptr WLR_buffer -> IO ()
 
 foreign import capi "wlr/types/wlr_output.h wlr_output_preferred_read_format"
-    wlr_output_preferred_read_format :: Ptr WLR_output -> IO (CUInt)
+    wlr_output_preferred_read_format :: Ptr WLR_output -> IO (Word32)
  
 foreign import capi "wlr/types/wlr_output.h wlr_output_set_damage"
     wlr_output_set_damage :: Ptr WLR_output -> Ptr PIXMAN_region32_t -> IO ()
@@ -338,7 +338,7 @@ foreign import capi "wlr/types/wlr_output.h wlr_output_get_gamma_size"
     wlr_output_get_gamma_size :: Ptr WLR_output -> IO (CSize)
 
 foreign import capi "wlr/types/wlr_output.h wlr_output_set_gamma"
-    wlr_output_set_gamma :: Ptr WLR_output -> CSize -> Ptr CUShort -> Ptr CUShort -> Ptr CUShort -> IO ()
+    wlr_output_set_gamma :: Ptr WLR_output -> CSize -> Ptr Word16 -> Ptr Word16 -> Ptr Word16 -> IO ()
 
 foreign import capi "wlr/types/wlr_output.h wlr_output_from_resource"
     wlr_output_from_resource :: Ptr WL_resource -> IO (Ptr WLR_output)
@@ -356,7 +356,7 @@ foreign import capi "wlr/types/wlr_output.h wlr_output_add_software_cursors_to_r
     wlr_output_add_software_cursors_to_render_pass :: Ptr WLR_output -> Ptr WLR_render_pass -> Ptr PIXMAN_region32_t -> IO ()
 
 foreign import capi "wlr/types/wlr_output.h wlr_output_get_primary_formats"
-    wlr_output_get_primary_formats :: Ptr WLR_output -> CUInt -> IO (Ptr WLR_drm_format_set)
+    wlr_output_get_primary_formats :: Ptr WLR_output -> Word32 -> IO (Ptr WLR_drm_format_set)
 
 foreign import capi "wlr/types/wlr_output.h wlr_output_is_direct_scanout_allowed"
     wlr_output_is_direct_scanout_allowed :: Ptr WLR_output -> IO (CBool)
@@ -365,7 +365,7 @@ foreign import capi "wlr/types/wlr_output.h wlr_output_cursor_create"
     wlr_output_cursor_create :: Ptr WLR_output -> IO (Ptr WLR_output_cursor)
 
 foreign import capi "wlr/types/wlr_output.h wlr_output_cursor_set_buffer"
-    wlr_output_cursor_set_buffer :: Ptr WLR_output_cursor -> Ptr WLR_buffer -> CInt-> CInt -> IO (CBool)
+    wlr_output_cursor_set_buffer :: Ptr WLR_output_cursor -> Ptr WLR_buffer -> Int32-> Int32 -> IO (CBool)
 
 foreign import capi "wlr/types/wlr_output.h wlr_output_cursor_move"
     wlr_output_cursor_move :: Ptr WLR_output_cursor -> CDouble -> CDouble -> IO (CBool)
@@ -386,7 +386,7 @@ foreign import capi "wlr/types/wlr_output.h wlr_output_state_set_mode"
     wlr_output_state_set_mode :: Ptr WLR_output_state -> Ptr WLR_output_mode -> IO ()
 
 foreign import capi "wlr/types/wlr_output.h wlr_output_state_set_custom_mode"
-    wlr_output_state_set_custom_mode :: Ptr WLR_output_state -> CInt -> CInt -> CInt -> IO ()
+    wlr_output_state_set_custom_mode :: Ptr WLR_output_state -> Int32 -> Int32 -> Int32 -> IO ()
 
 foreign import capi "wlr/types/wlr_output.h wlr_output_state_set_scale"
     wlr_output_state_set_scale :: Ptr WLR_output_state -> CFloat -> IO ()
@@ -398,7 +398,7 @@ foreign import capi "wlr/types/wlr_output.h wlr_output_state_set_adaptive_sync_e
     wlr_output_state_set_adaptive_sync_enabled :: Ptr WLR_output_state -> CBool -> IO ()
 
 foreign import capi "wlr/types/wlr_output.h wlr_output_state_set_render_format"
-    wlr_output_state_set_render_format :: Ptr WLR_output_state -> CUInt -> IO ()
+    wlr_output_state_set_render_format :: Ptr WLR_output_state -> Word32 -> IO ()
 
 foreign import capi "wlr/types/wlr_output.h wlr_output_state_set_subpixel"
     wlr_output_state_set_subpixel :: Ptr WLR_output_state -> WL_output_subpixel -> IO ()
@@ -407,7 +407,7 @@ foreign import capi "wlr/types/wlr_output.h wlr_output_state_set_buffer"
     wlr_output_state_set_buffer :: Ptr WLR_output_state -> Ptr WLR_buffer -> IO ()
 
 foreign import capi "wlr/types/wlr_output.h wlr_output_state_set_gamma_lut"
-    wlr_output_state_set_gamma_lut :: Ptr WLR_output_state -> CSize -> Ptr CUShort -> Ptr CUShort -> Ptr CUShort -> IO (CBool)
+    wlr_output_state_set_gamma_lut :: Ptr WLR_output_state -> CSize -> Ptr Word16 -> Ptr Word16 -> Ptr Word16 -> IO (CBool)
 
 foreign import capi "wlr/types/wlr_output.h wlr_output_state_set_damage"
     wlr_output_state_set_damage :: Ptr WLR_output_state -> Ptr PIXMAN_region32_t -> IO ()

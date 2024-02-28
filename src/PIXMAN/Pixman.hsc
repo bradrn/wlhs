@@ -28,8 +28,8 @@ type PIXMAN_box32_t = PIXMAN_box32
 {{ struct
     pixman.h,
     pixman_box32,
-    x1, CInt,
-    y1, CInt,
-    x2, CInt,
-    y2, CInt
+    x1, Word32,
+    y1, Word32,
+    x2, Word32,
+    y2, Word32
 }}

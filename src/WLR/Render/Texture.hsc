@@ -19,8 +19,8 @@ import WLR.Types.Buffer
     wlr/render/wlr_texture.h,
     wlr_texture,
     impl,     Ptr WLR_texture_impl,
-    width,    CUInt,
-    height,   CUInt,
+    width,    Word32,
+    height,   Word32,
     renderer, Ptr WLR_renderer
 }}
 
