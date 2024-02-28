@@ -8,6 +8,15 @@ module WLR.Render.Interface where
 import Foreign
 import Foreign.C.Types
 
+import WLR.Render.Texture
+
+{{ struct
+    wlr/render/interface.h,
+    wlr_texture_impl,
+    update_from_buffer, FunPtr FunUpdateFromBuffer,
+    destroy,            FunPtr (Ptr WLR_texture -> IO ())
+}}
+
 {{ struct
     wlr/render/interface.h,
     wlr_render_timer,
