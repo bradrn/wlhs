@@ -11,10 +11,10 @@ import Foreign.C.Types
 import WL.ServerCore
 import WLR.Util.Addon
 
-{{ struct wlr/types/wlr_buffer, wlr_buffer_impl }}
+{{ struct wlr/types/wlr_buffer.h, wlr_buffer_impl }}
 
 {{ struct
-    wlr/types/wlr_buffer,
+    wlr/types/wlr_buffer.h,
     wlr_buffer,
     impl, Ptr WLR_buffer_impl,
     width, CInt,
