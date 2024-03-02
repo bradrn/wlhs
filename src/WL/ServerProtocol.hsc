@@ -2,7 +2,6 @@
 module WL.ServerProtocol where
 
 import Foreign.C.Types (CInt)
-import Foreign.C.Types
 
 #include <wayland-server-protocol.h>
 
