@@ -215,9 +215,6 @@ pattern WLR_POINTER_BUTTONS_CAP = 16
     data, Ptr ()
 }}
 
--- TODO enter's Word32 final parameter is a const array
--- how do I do 'const' in HSC?
-
 {{ struct
     wlr/types/wlr_seat.h,
     wlr_keyboard_grab_interface,
