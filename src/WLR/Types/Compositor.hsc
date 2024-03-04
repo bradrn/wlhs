@@ -1,7 +1,8 @@
 {-# LANGUAGE PatternSynonyms #-}
 module WLR.Types.Compositor where
 
-import Foreign.C.Types (CBool, CInt, CSize, CUInt)
+import Foreign (Word32, Int32)
+import Foreign.C.Types (CBool, CInt, CSize)
 import Foreign.C.String (CString)
 import Foreign.Storable (Storable(..))
 import Foreign.Ptr (Ptr, FunPtr)
@@ -52,7 +53,7 @@ import PIXMAN.Pixman (PIXMAN_region32)
     addons, WLR_addon_set,
     renderer_destroy, WL_listener,
     role_resource_destroy, WL_listener,
-    previous scale, CInt,
+    previous scale, Int32,
     previous transform, WL_output_transform,
     previous width, CInt,
     previous height, CInt,
@@ -61,7 +62,7 @@ import PIXMAN.Pixman (PIXMAN_region32)
     unmap_commit, CBool,
     opaque, CBool,
     has_buffer, CBool,
-    preferred_buffer_scale, CInt,
+    preferred_buffer_scale, Int32,
     preferred_buffer_transform_sent, CBool,
     preferred_buffer_transform, WL_output_transform
 }}
@@ -69,17 +70,17 @@ import PIXMAN.Pixman (PIXMAN_region32)
 {{ struct
     wlr/types/wlr_compositor.h,
     wlr_surface_state,
-    committed, CUInt,
-    seq, CUInt,
+    committed, Word32,
+    seq, Word32,
     buffer, Ptr WLR_buffer,
-    dx, CUInt,
-    dy, CUInt,
+    dx, Int32,
+    dy, Int32,
     surface_damage, PIXMAN_region32,
     buffer_damage, PIXMAN_region32,
     opaque, PIXMAN_region32,
     input, PIXMAN_region32,
     transform, WL_output_transform,
-    scale, CInt,
+    scale, Int32,
     frame_callback_list, WL_list,
     width, CInt,
     height, CInt,
