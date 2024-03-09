@@ -1,4 +1,4 @@
-module WLR.Util.Time where
+module Time.Time where
 
 import Foreign.C.Types (CLong, CTime)
 import Foreign.Storable (Storable(..))
