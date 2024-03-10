@@ -52,8 +52,6 @@ foreign import capi "wlr/types/wlr_keyboard_group.h wlr_keyboard_group_create"
 foreign import capi "wlr/types/wlr_keyboard_group.h wlr_keyboard_group_from_wlr_keyboard"
     wlr_keyboard_group_from_wlr_keyboard :: Ptr WLR_keyboard -> Ptr WLR_keyboard_group
 
--- TODO I looked at the C code for this function and it looks pure, but I'm not sure if it actually is
--- put it in IO for now
 foreign import capi "wlr/types/wlr_keyboard_group.h wlr_keyboard_group_add_keyboard"
     wlr_keyboard_group_add_keyboard :: Ptr WLR_keyboard_group -> Ptr WLR_keyboard -> IO (Bool)
 
