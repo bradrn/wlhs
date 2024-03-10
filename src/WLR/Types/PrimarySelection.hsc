@@ -1,3 +1,5 @@
+{-# LANGUAGE EmptyDataDeriving #-}
+
 module WLR.Types.PrimarySelection where
 
 #define WLR_USE_UNSTABLE

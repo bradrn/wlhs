@@ -1,3 +1,4 @@
+{-# LANGUAGE EmptyDataDeriving #-}
 {-# LANGUAGE PatternSynonyms #-}
 module WLR.Types.DataDevice where
 

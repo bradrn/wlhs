@@ -1,3 +1,5 @@
+{-# LANGUAGE EmptyDataDeriving #-}
+
 module WL.ServerCore where
 
 #include <wayland-server-core.h>
