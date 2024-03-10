@@ -10,7 +10,7 @@ import Foreign.C.Types
 
 import PIXMAN.Pixman
 import WLR.Render.Renderer
-import WLR.Types.Buffer
+import {-# SOURCE #-} WLR.Types.Buffer (WLR_buffer)
 import {-# SOURCE #-} WLR.Render.Interface (WLR_texture_impl)
 
 {{ struct

@@ -4,4 +4,4 @@
 -- use the SOURCE pragma when keyboard group imports it
 -- I chose the latter, because other work arounds would be less similar to the C source
 module WLR.Types.Keyboard where
-   data WLR_keyboard
+    data WLR_keyboard
