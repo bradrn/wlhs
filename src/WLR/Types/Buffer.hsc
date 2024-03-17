@@ -30,7 +30,7 @@ import WLR.Render.Texture (WLR_texture)
 }}
 
 {{ struct
-    include/wlr/types/wlr_buffer.h,
+    wlr/types/wlr_buffer.h,
     wlr_client_buffer,
     base, WLR_buffer,
     texture, WLR_texture,

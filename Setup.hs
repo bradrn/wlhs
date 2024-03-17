@@ -91,9 +91,9 @@ mkStruct args = dataDecl <> storableDecl
 
     dataDecl =
         T.concat [ "data {-# CTYPE \"" , cfile , "\" \"struct ", ctype, "\" #-} " , hstype]
-        <> if (null fields')
+        <> (if (null fields')
             then ""
-            else T.concat [" = ", hstype, " { ", recordFields, " }"]
+            else T.concat [" = ", hstype, " { ", recordFields, " }"])
         <> " deriving Show"
 
     recordFields = T.intercalate ", " $

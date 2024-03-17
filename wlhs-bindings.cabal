@@ -21,6 +21,7 @@ custom-setup
 library
     exposed-modules:
         PIXMAN.Pixman
+        Time.Time
         WL.Keyboard
         WL.ServerCore
         WL.ServerProtocol
@@ -51,7 +52,6 @@ library
         WLR.Util.Box
         WLR.Util.Edges
         WLR.Util.Log
-        WLR.Util.Time
         WLR.Version
 
     pkgconfig-depends:  wlroots ==0.17.1, wayland-server, pixman-1

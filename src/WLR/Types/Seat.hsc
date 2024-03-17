@@ -21,7 +21,7 @@ import WL.Global (WL_global)
 import WL.Client (WL_client)
 import WL.Utils (WL_list)
 
-import WLR.Util.Time (TIMESPEC)
+import Time.Time (TIMESPEC)
 import {-# SOURCE #-} WLR.Types.DataDevice (
     WLR_drag
     , WLR_data_source
