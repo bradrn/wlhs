@@ -19,8 +19,8 @@ pattern WLR_DAMAGE_RING_PREVIOUS_LEN = 2
 -- | previous and previous_idx are private state
 {{ struct wlr/types/wlr_damage_ring.h,
     wlr_damage_ring,
-    width, CInt,
-    height, CInt,
+    width, Int32,
+    height, Int32,
     current, PIXMAN_region32,
     previous, [WLR_DAMAGE_RING_PREVIOUS_LEN] PIXMAN_region32,
     previous_idx, CSize
